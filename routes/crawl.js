@@ -58,9 +58,7 @@ var db = mongoose.connection,
     locations: 'string',
     family: 'object',
     reports_to: 'string',
-    latitude: 'number',
-    longitude: 'number'
-
+    loc: 'array'
   }),
   People = mongoose.model('people', peopleSchema);
 
