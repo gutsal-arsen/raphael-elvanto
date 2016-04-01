@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}!
+
+  section
+    p Import Elvanto
+
+    button(data-action="importElvanto" title="Import Elvanto").
+      Import Elvanto
+
+  section().progress
+    p Import Excel
+
+    input(data-action="importExcel" type="file" name="inputFile" multiple="true")
