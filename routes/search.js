@@ -18,6 +18,13 @@ var findPeoplesByCity = function(city, callback) {
   });
 };
 
+var findPeoplesByStreetAddress = function(streetAddress, callback) {
+  var db = mongoose.connection;
+  db.collection('peoples').find({'home_address': {'$regex': '.*'+streetAddress+'.*'}}, table_fields).toArray(function(err, results){
+    callback(err, results);
+  });
+};
+
 /* GET users listing. */
 router.get('/', function (req, res) {
   res.render('search', {title: 'Search'});
@@ -34,6 +41,11 @@ router.post('/', function (req, res) {
   switch (search_type) {
     case 'city':
       findPeoplesByCity(search_term, function (err, results) {
+        res.render("search_results", {peoples: results});
+      });
+      break;
+    case 'street':
+      findPeoplesByStreetAddress(search_term, function (err, results) {
         res.render("search_results", {peoples: results});
       });
       break;
