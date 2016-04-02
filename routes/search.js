@@ -58,13 +58,14 @@ router.post('/', function (req, res) {
       });
       break;
     case 'loc':
-      if (search_term.split(',').length != 3) {
+      var search_term_params = search_term.split(',');
+      if (search_term_params.length != 3) {
         res.send("Incorrect search term syntax used.");
         return;
       }
-      var lng = parseFloat(search_term.split(',')[0]),
-        lat = parseFloat(search_term.split(',')[1]),
-        rad = parseFloat(search_term.split(',')[2]);
+      var lng = parseFloat(search_term_params[0]),
+        lat = parseFloat(search_term_params[1]),
+        rad = parseFloat(search_term_params[2]);
       findPeoplesByLoc(lng, lat, rad, function (err, results) {
         res.render("search_results", {peoples: results});
       });
