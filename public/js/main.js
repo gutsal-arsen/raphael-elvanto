@@ -54,5 +54,17 @@ document.onreadystatechange = function (e) {
     $('*[data-action]').each(function (idx, b) {
       b.onclick = handlers[b.dataset['action']]; // assigning onclick handler
     });
+
+    $("#search_type").change(function(e){
+      if(e.currentTarget.selectedIndex === 3) { // last item selected
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+          }
+
+        function showPosition(position) {
+          $("#search_term").val(position.coords.longitude + "," + position.coords.latitude + ",10");
+        }
+      }
+    });
   }
 };
