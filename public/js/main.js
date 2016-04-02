@@ -24,6 +24,28 @@ var handlers = {
 
   importExcel: function (e) {
     $('input[type=file]').click();
+  },
+
+  search: function (e) {
+    $.get({
+      url: '/search',
+      method: 'POST',
+      data: {
+        search_type: $('select#search_type').val(),
+        search_term: $('input#search_term').val()
+      },
+      beforeSend: function () {
+        $('.search_result').fadeOut('slow');
+      },
+      complete: function (response) {
+        $('.search_result').fadeIn('slow');
+      },
+      success: function (response, status) {
+        $('.search_result').html(response);
+        $('.search_result').hide();
+        console.log(status, response);
+      }
+    });
   }
 };
 
