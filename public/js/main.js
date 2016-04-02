@@ -77,6 +77,8 @@ function initMap(lng, lat, serializedMarkers) {
     zoom: 8
   });
 
+  var googleMarkers = [];
+
   var markersArray = serializedMarkers.split(';');
   var markersLength = markersArray.length;
   for (var i = 0; i < markersLength; i++) {
@@ -90,5 +92,15 @@ function initMap(lng, lat, serializedMarkers) {
       map: map,
       title: title
     });
+    googleMarkers.push(marker);
+  }
+  if (googleMarkers.length > 0) {
+    // Make all markers fit screen
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < googleMarkers.length; i++) {
+      bounds.extend(googleMarkers[i].getPosition());
+    }
+    map.setCenter(bounds.getCenter());
+    map.fitBounds(bounds);
   }
 }
