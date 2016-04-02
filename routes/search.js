@@ -27,7 +27,8 @@ var findPeoplesByStreetAddress = function(streetAddress, callback) {
 
 var findPeoplesByLoc = function(lng, lat, rad, callback) {
   var db = mongoose.connection;
-  db.collection('peoples').find({loc:{$geoWithin: { $centerSphere: [ [lng, lat] , rad/3963.2] } } }).toArray(function(err, results){
+  const EARTH_RADIUS = 3963.2;
+  db.collection('peoples').find({loc:{$geoWithin: { $centerSphere: [ [lng, lat] , rad/EARTH_RADIUS] } } }).toArray(function(err, results){
     callback(err, results);
   });
 };
