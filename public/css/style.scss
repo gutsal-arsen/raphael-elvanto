@@ -6,3 +6,16 @@ body {
 a {
   color: #00B7FF;
 }
+
+table.search_results {
+  border: 1px solid black;
+  thead {
+    background: lightgray;
+    font-weight: bold;
+  }
+  tr, td {
+    border: 1px solid black;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */

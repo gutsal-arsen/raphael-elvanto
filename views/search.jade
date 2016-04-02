@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1= title
+
+  section
+    select#search_type(name='search_type')
+      option(disabled='disabled' selected="selected") Choose search method
+      option(value='city') City
+      option(value='street') Street
+      option(value='loc') Geolocation [lng,lat,rad]
+
+    br
+    br
+
+    input#search_term(name="search_term")
+
+    button(data-action="search").
+      search
+
+  br
+  br
+  section.search_result
