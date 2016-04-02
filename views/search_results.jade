@@ -20,3 +20,9 @@ section
   .right_block
     div#map
 
+script(type='text/javascript').
+  var gMapPosArray = '#{gMapPos}'.split(",");
+  var lng = gMapPosArray[0];
+  var lat = gMapPosArray[1];
+  initMap(lng, lat, '#{markers}');
+
