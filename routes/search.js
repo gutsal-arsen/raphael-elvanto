@@ -25,6 +25,14 @@ var findPeoplesByStreetAddress = function(streetAddress, callback) {
   });
 };
 
+var findPeoplesByLoc = function(lng, lat, rad, callback) {
+  var db = mongoose.connection;
+  db.collection('peoples').createIndex({loc:'2dsphere'});
+  db.collection('peoples').find({loc:{$geoWithin: { $centerSphere: [ [lng, lat] , rad/3963.2] } } }).toArray(function(err, results){
+    callback(err, results);
+  });
+};
+
 /* GET users listing. */
 router.get('/', function (req, res) {
   res.render('search', {title: 'Search'});
@@ -46,6 +54,18 @@ router.post('/', function (req, res) {
       break;
     case 'street':
       findPeoplesByStreetAddress(search_term, function (err, results) {
+        res.render("search_results", {peoples: results});
+      });
+      break;
+    case 'loc':
+      if (search_term.split(',').length != 3) {
+        res.send("Incorrect search term syntax used.");
+        return;
+      }
+      var lng = parseFloat(search_term.split(',')[0]),
+        lat = parseFloat(search_term.split(',')[1]),
+        rad = parseFloat(search_term.split(',')[2]);
+      findPeoplesByLoc(lng, lat, rad, function (err, results) {
         res.render("search_results", {peoples: results});
       });
       break;
