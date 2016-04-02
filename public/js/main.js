@@ -68,3 +68,27 @@ document.onreadystatechange = function (e) {
     });
   }
 };
+
+function initMap(lng, lat, serializedMarkers) {
+  var mapDiv = document.getElementById('map');
+
+  var map = new google.maps.Map(mapDiv, {
+    center: {lat: parseFloat(lat), lng: parseFloat(lng)},
+    zoom: 8
+  });
+
+  var markersArray = serializedMarkers.split(';');
+  var markersLength = markersArray.length;
+  for (var i = 0; i < markersLength; i++) {
+    var markerLngLatTitle = markersArray[i].split(',');
+    var lng = parseFloat(markerLngLatTitle[0]),
+        lat = parseFloat(markerLngLatTitle[1]),
+        title = markerLngLatTitle[2];
+    var latLng = {lat: lat, lng: lng};
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: map,
+      title: title
+    });
+  }
+}
