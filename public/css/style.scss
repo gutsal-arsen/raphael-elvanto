@@ -9,6 +9,7 @@ a {
 
 table.search_results {
   border: 1px solid black;
+  width: 90%;
   thead {
     background: lightgray;
     font-weight: bold;
@@ -16,6 +17,23 @@ table.search_results {
   tr, td {
     border: 1px solid black;
   }
+}
+
+section {
+  .left_block {
+    width: 50%;
+    float: left;
+  }
+  .right_block {
+    width: 50%;
+    float: right;
+  }
+}
+
+div#map {
+  width: 100%;
+  height: 500px;
+  background-color: #CCC;
 }
 
 /*# sourceMappingURL=style.css.map */
