@@ -35,14 +35,15 @@ var handlers = {
         search_term: $('input#search_term').val()
       },
       beforeSend: function () {
-        $('.search_result').fadeOut('slow');
+        //$('.search_result').fadeOut('slow');
       },
       complete: function (response) {
-        $('.search_result').fadeIn('slow');
+        //$('.search_result').fadeIn('slow');
       },
       success: function (response, status) {
         $('.search_result').html(response);
-        $('.search_result').hide();
+        // FIX: google map isn't displayed correctly if has been constructed upon hidden state
+        //$('.search_result').hide();
         console.log(status, response);
       }
     });
@@ -90,5 +91,6 @@ function initMap(lng, lat, serializedMarkers) {
     }
     map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);
+    //map.setZoom(map.getZoom()-1);
   }
 }
