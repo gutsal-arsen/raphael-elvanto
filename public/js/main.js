@@ -47,6 +47,12 @@ var handlers = {
         console.log(status, response);
       }
     });
+  },
+
+  search_on_enter: function(e) {
+    if ( e.which == 13 ) {
+      $("button[data-action=search]").click();
+    }
   }
 };
 
@@ -66,6 +72,9 @@ document.onreadystatechange = function (e) {
           $("#search_term").val(position.coords.longitude + "," + position.coords.latitude + ",10");
         }
       }
+    });
+    $('*[data-keydown]').each(function (idx, b) {
+      b.onkeypress = handlers[b.dataset['keydown']]; // assigning keydown handler
     });
   }
 };
