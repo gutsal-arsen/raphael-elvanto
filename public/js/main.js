@@ -47,6 +47,12 @@ var handlers = {
         console.log(status, response);
       }
     });
+  },
+
+  search_on_enter: function(e) {
+    if ( e.which == 13 ) {
+      $("button[data-action=search]").click();
+    }
   }
 };
 
@@ -54,6 +60,9 @@ document.onreadystatechange = function (e) {
   if (e.target.readyState == 'complete') {
     $('*[data-action]').each(function (idx, b) {
       b.onclick = handlers[b.dataset['action']]; // assigning onclick handler
+    });
+    $('*[data-keydown]').each(function (idx, b) {
+      b.onkeypress = handlers[b.dataset['keydown']]; // assigning keydown handler
     });
   }
 };
