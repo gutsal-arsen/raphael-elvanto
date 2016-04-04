@@ -6,13 +6,38 @@ a {
   color: #00B7FF; }
 
 table.search_results {
-  border: 1px solid black; }
-  table.search_results thead {
-    background: lightgray;
-    font-weight: bold; }
-  table.search_results tr, table.search_results td {
-    border: 1px solid black; }
+  border: 1px solid black;
+  width: 90%;
+}
 
-/*# sourceMappingURL=style.css.map */
+table.search_results thead {
+  background: lightgray;
+  font-weight: bold;
+}
+
+table.search_results tr {
+  border: 1px solid black;
+}
+
+table.search_results td {
+  border: 1px solid black;
+}
+
+section .left_block {
+  width: 50%;
+  float: left;
+}
+
+section .right_block {
+  width: 50%;
+  float: right;
+}
+
+div#map {
+  width: 100%;
+  height: 500px;
+  background-color: #CCC;
+}
+
 
 /*# sourceMappingURL=style.css.map */

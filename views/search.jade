@@ -1,21 +1,22 @@
 extends layout
 
 block content
+  script(src='https://maps.google.com/maps/api/js')
   h1= title
 
   section
     select#search_type(name='search_type')
       option(disabled='disabled' selected="selected") Choose search method
-      option(value='city') City
-      option(value='street') Street
-      option(value='loc') Geolocation [lng,lat,rad]
+      option(value='city' title='example: Upland, Perris, Corona') City
+      option(value='street' title='example: 385') Street
+      option(value='loc' title='example: -117,33,40') Geolocation [lng,lat,rad]
 
     br
     br
 
-    input#search_term(name="search_term")
+    input#search_term(name="search_term", data-onkeypress="search_on_enter")
 
-    button(data-action="search").
+    button(data-click="search").
       search
 
   br

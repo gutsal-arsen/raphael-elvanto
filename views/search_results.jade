@@ -1,18 +1,28 @@
 p Total #{peoples.length} results found
-table.search_results
-  thead
-    tr
-      td first name
-      td last name
-      td gender
-      td city
-      td address
-  tbody
-  for user in peoples
-    tr
-      td= user.firstname
-      td= user.lastname
-      td= user.gender
-      td= user.home_city
-      td= user.home_address
+section
+  .left_block
+    table.search_results
+      thead
+        tr
+          td first name
+          td last name
+          td gender
+          td city
+          td address
+      tbody
+      for user in peoples
+        tr
+          td= user.firstname
+          td= user.lastname
+          td= user.gender
+          td= user.home_city
+          td= user.home_address
+  .right_block
+    div#map
+
+script(type='text/javascript').
+  var gMapPosArray = '#{gMapPos}'.split(",");
+  var lng = gMapPosArray[0];
+  var lat = gMapPosArray[1];
+  initMap(lng, lat, '#{markers}');
 
