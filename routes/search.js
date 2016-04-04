@@ -52,10 +52,11 @@ var getPeoplesMarkers = function(peoples) {
   var markers = "";
   for (var i = 0; i < peoplesLength; i++) {
     if (i > 0) markers += ';';
-    var lng = peoples[i].loc[0],
-        lat = peoples[i].loc[1],
+    var person = peoples[i];
+    var lng = person.loc[0],
+        lat = person.loc[1],
     // quickFix: replace our 'special' symbols if they occurs in concatenated string
-        markerName = (peoples[i].firstname + ' ' + peoples[i].lastname + ' at ' + peoples[i].home_address).split(',').join(' ').split(';').join(' ');
+        markerName = (person.firstname + ' ' + person.lastname + ' at ' + person.home_address).split(',').join(' ').split(';').join(' ');
     markers += (lng + ',' + lat + ',' + markerName);
   }
   return markers;
