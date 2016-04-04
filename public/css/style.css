@@ -6,20 +6,13 @@ a {
   color: #00B7FF; }
 
 table.search_results {
-  border: 1px solid black;
-}
+  border: 1px solid black; }
+  table.search_results thead {
+    background: lightgray;
+    font-weight: bold; }
+  table.search_results tr, table.search_results td {
+    border: 1px solid black; }
 
-table.search_results thead {
-  background: lightgray;
-  font-weight: bold;
-}
-
-table.search_results tr {
-  border: 1px solid black;
-}
-
-table.search_results td {
-  border: 1px solid black;
-}
+/*# sourceMappingURL=style.css.map */
 
 /*# sourceMappingURL=style.css.map */
