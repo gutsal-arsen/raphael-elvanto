@@ -51,30 +51,30 @@ var handlers = {
 
   search_on_enter: function(e) {
     if ( e.which == 13 ) {
-      $("button[data-action=search]").click();
+      $("button[data-click=search]").click();
     }
   }
 };
 
 document.onreadystatechange = function (e) {
   if (e.target.readyState == 'complete') {
-    $('*[data-action]').each(function (idx, b) {
-      b.onclick = handlers[b.dataset['action']]; // assigning onclick handler
+    $('*[data-click]').each(function (idx, b) {
+      b.onclick = handlers[b.dataset['click']]; // assigning onclick handler
+    });
+    $('*[data-onkeypress]').each(function (idx, b) {
+      b.onkeypress = handlers[b.dataset['onkeypress']]; // assigning onkeypress handler
     });
 
-    $("#search_type").change(function(e){
-      if(e.currentTarget.selectedIndex === 3) { // last item selected
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-          }
+    $("#search_type").change(function (e) {
+      if (e.currentTarget.selectedIndex === 3) { // last item selected
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        }
 
         function showPosition(position) {
           $("#search_term").val(position.coords.longitude + "," + position.coords.latitude + ",10");
         }
       }
-    });
-    $('*[data-keydown]').each(function (idx, b) {
-      b.onkeypress = handlers[b.dataset['keydown']]; // assigning keydown handler
     });
   }
 };
