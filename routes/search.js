@@ -37,11 +37,16 @@ var findPeoplesByLoc = function(lng, lat, rad, callback) {
 var calculateGMapPosition = function(peoples) {
   // google map center position - first matched user from array, if any :
   if (peoples.length > 0) {
-    var location = peoples[0].loc;
-    if (location.length > 0) {
-      var gMapPos = [location[0], location[1]]; // lng, lat
-      return gMapPos;
-    }
+    var centerLng = peoples.reduce(function(sum, person) {
+      var personLng = person.loc[0];
+      return (sum + personLng);
+    }, 0)/peoples.length;
+
+    var centerLat = peoples.reduce(function(sum, person) {
+        var personLat = person.loc[1];
+        return (sum + personLat);
+      }, 0)/peoples.length;
+    return [centerLng, centerLat];
   }
   return [0,0]
 };
