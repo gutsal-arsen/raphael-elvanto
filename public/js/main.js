@@ -98,8 +98,8 @@ function initMap(lng, lat, serializedMarkers) {
     for (var i = 0; i < googleMarkers.length; i++) {
       bounds.extend(googleMarkers[i].getPosition());
     }
-    map.setCenter(bounds.getCenter());
     map.fitBounds(bounds);
+    map.setCenter(latLng);
     //map.setZoom(map.getZoom()-1);
   }
 }
