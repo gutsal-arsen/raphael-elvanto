@@ -65,11 +65,11 @@ document.onreadystatechange = function (e) {
       b.onkeypress = handlers[b.dataset['onkeypress']]; // assigning onkeypress handler
     });
 
-    $("#search_type").change(function(e){
-      if(e.currentTarget.selectedIndex === 3) { // last item selected
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-          }
+    $("#search_type").change(function (e) {
+      if (e.currentTarget.selectedIndex === 3) { // last item selected
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        }
 
         function showPosition(position) {
           $("#search_term").val(position.coords.longitude + "," + position.coords.latitude + ",10");
