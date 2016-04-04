@@ -35,24 +35,34 @@ var handlers = {
         search_term: $('input#search_term').val()
       },
       beforeSend: function () {
-        $('.search_result').fadeOut('slow');
+        //$('.search_result').fadeOut('slow');
       },
       complete: function (response) {
-        $('.search_result').fadeIn('slow');
+        //$('.search_result').fadeIn('slow');
       },
       success: function (response, status) {
         $('.search_result').html(response);
-        $('.search_result').hide();
+        // FIX: google map isn't displayed correctly if has been constructed upon hidden state
+        //$('.search_result').hide();
         console.log(status, response);
       }
     });
+  },
+
+  search_on_enter: function(e) {
+    if ( e.which == 13 ) {
+      $("button[data-click=search]").click();
+    }
   }
 };
 
 document.onreadystatechange = function (e) {
   if (e.target.readyState == 'complete') {
-    $('*[data-action]').each(function (idx, b) {
-      b.onclick = handlers[b.dataset['action']]; // assigning onclick handler
+    $('*[data-click]').each(function (idx, b) {
+      b.onclick = handlers[b.dataset['click']]; // assigning onclick handler
+    });
+    $('*[data-onkeypress]').each(function (idx, b) {
+      b.onkeypress = handlers[b.dataset['onkeypress']]; // assigning onkeypress handler
     });
 
     $("#search_type").change(function(e){
@@ -68,3 +78,40 @@ document.onreadystatechange = function (e) {
     });
   }
 };
+
+function initMap(lng, lat, serializedMarkers) {
+  var mapDiv = document.getElementById('map');
+
+  var map = new google.maps.Map(mapDiv, {
+    center: {lat: parseFloat(lat), lng: parseFloat(lng)},
+    zoom: 8
+  });
+
+  var googleMarkers = [];
+
+  var markersArray = serializedMarkers.split(';');
+  var markersLength = markersArray.length;
+  for (var i = 0; i < markersLength; i++) {
+    var markerLngLatTitle = markersArray[i].split(',');
+    var lng = parseFloat(markerLngLatTitle[0]),
+        lat = parseFloat(markerLngLatTitle[1]),
+        title = markerLngLatTitle[2];
+    var latLng = {lat: lat, lng: lng};
+    var marker = new google.maps.Marker({
+      position: latLng,
+      map: map,
+      title: title
+    });
+    googleMarkers.push(marker);
+  }
+  if (googleMarkers.length > 0) {
+    // Make all markers fit screen
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < googleMarkers.length; i++) {
+      bounds.extend(googleMarkers[i].getPosition());
+    }
+    map.fitBounds(bounds);
+    map.setCenter(latLng);
+    //map.setZoom(map.getZoom()-1);
+  }
+}
