@@ -51,18 +51,18 @@ var handlers = {
 
   search_on_enter: function(e) {
     if ( e.which == 13 ) {
-      $("button[data-action=search]").click();
+      $("button[data-click=search]").click();
     }
   }
 };
 
 document.onreadystatechange = function (e) {
   if (e.target.readyState == 'complete') {
-    $('*[data-action]').each(function (idx, b) {
-      b.onclick = handlers[b.dataset['action']]; // assigning onclick handler
+    $('*[data-click]').each(function (idx, b) {
+      b.onclick = handlers[b.dataset['click']]; // assigning onclick handler
     });
-    $('*[data-keydown]').each(function (idx, b) {
-      b.onkeypress = handlers[b.dataset['keydown']]; // assigning keydown handler
+    $('*[data-onkeypress]').each(function (idx, b) {
+      b.onkeypress = handlers[b.dataset['onkeypress']]; // assigning onkeypress handler
     });
   }
 };
