@@ -79,6 +79,18 @@ document.onreadystatechange = function (e) {
   }
 };
 
+function addMarkerBubble(map, marker, contentHtml) {
+  marker['bubble'] = new google.maps.InfoWindow({
+    content: contentHtml
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    var bubble = this['bubble'];
+    bubble.isOpened === undefined ? bubble.isOpened = false : bubble.isOpened = !bubble.isOpened;
+    bubble.isOpened ? bubble.close() : bubble.open(map, this);
+  });
+}
+
 function initMap(lng, lat, serializedMarkers) {
   var mapDiv = document.getElementById('map');
 
@@ -102,6 +114,7 @@ function initMap(lng, lat, serializedMarkers) {
       map: map,
       title: title
     });
+    addMarkerBubble(map, marker, title);
     googleMarkers.push(marker);
   }
   if (googleMarkers.length > 0) {
