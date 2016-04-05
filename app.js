@@ -1,3 +1,7 @@
+require('dotenv').config();
+if (undefined === (process.env.GOOGLE_ACCESS_TOKEN)) throw 'Env var GOOGLE_ACCESS_TOKEN is undefined';
+
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
