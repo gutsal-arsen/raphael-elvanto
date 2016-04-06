@@ -1,8 +1,15 @@
 script#marker_bubble_template(type='text/html').
   <b>{{full_name}}</b>
+  <hr/>
   Address: {{address}}
-  Phone # {{phone}}
   <br/>
+  Phone {{phone}}
+  <hr/>
   <b>FAMILY MEMBERS</b>
-  {{family_members}}
-  <!--{Here should be the list of family members [same surname] living in 15 miles radius near this family}-->
+  <br>
+
+  {{#families}}
+    <ul style="list-style-type: square">
+      <li>{{.}}</li>
+    </ul>
+  {{/families}}
