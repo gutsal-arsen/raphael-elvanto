@@ -26,5 +26,6 @@ section
       var gMapPosArray = '#{gMapPos}'.split(",");
       var lng = gMapPosArray[0];
       var lat = gMapPosArray[1];
-      initMap(lng, lat, '#{markers}');
+      var markers = '#{markers}';
+      initMap(lng, lat, markers); //- TODO: pass people data to initMap
 

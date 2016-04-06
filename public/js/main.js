@@ -79,9 +79,20 @@ document.onreadystatechange = function (e) {
   }
 };
 
-function addMarkerBubble(map, marker, contentHtml) {
+function getMarkerBubbleContent(bubble_data) {
+  var bubble_template = $('#marker_bubble_template').html();
+  return Mustache.render(bubble_template, bubble_data);
+}
+
+function addMarkerBubble(map, marker) { // TODO: transmit person data
+  var bubble_data = {
+    full_name: "full name",
+    address: "address",
+    phone: "phone",
+    family_members: "family members"
+  };
   marker['bubble'] = new google.maps.InfoWindow({
-    content: contentHtml
+    content: getMarkerBubbleContent(bubble_data)
   });
 
   google.maps.event.addListener(marker, 'click', function() {
@@ -91,7 +102,7 @@ function addMarkerBubble(map, marker, contentHtml) {
   });
 }
 
-function initMap(lng, lat, serializedMarkers) {
+function initMap(lng, lat, serializedMarkers) { // TODO: transmit people data as new parameter
   var mapDiv = document.getElementById('map');
 
   var map = new google.maps.Map(mapDiv, {
@@ -114,7 +125,7 @@ function initMap(lng, lat, serializedMarkers) {
       map: map,
       title: title
     });
-    addMarkerBubble(map, marker, title);
+    addMarkerBubble(map, marker);  // TODO: send person data parameter
     googleMarkers.push(marker);
   }
   if (googleMarkers.length > 0) {
