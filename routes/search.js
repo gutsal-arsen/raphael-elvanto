@@ -1,38 +1,9 @@
 var express = require('express');
 var router = express.Router();
+var async = require('async');
 
+var Peoples = require('./models/people');
 var mongoose = require('mongoose');
-
-var table_fields = {
-  'firstname': true,
-  'lastname': true,
-  'gender': true,
-  'home_city': true,
-  'home_address': true,
-  'loc': true
-};
-
-var findPeoplesByCity = function(city, callback) {
-  var db = mongoose.connection;
-  db.collection('peoples').find({'home_city': city}, table_fields).toArray(function(err, results){
-    callback(err, results);
-  });
-};
-
-var findPeoplesByStreetAddress = function(streetAddress, callback) {
-  var db = mongoose.connection;
-  db.collection('peoples').find({'home_address': {'$regex': '.*'+streetAddress+'.*'}}, table_fields).toArray(function(err, results){
-    callback(err, results);
-  });
-};
-
-var findPeoplesByLoc = function(lng, lat, rad, callback) {
-  var db = mongoose.connection;
-  const EARTH_RADIUS = 3963.2;
-  db.collection('peoples').find({loc:{$geoWithin: { $centerSphere: [ [lng, lat] , rad/EARTH_RADIUS] } } }).toArray(function(err, results){
-    callback(err, results);
-  });
-};
 
 var calculateGMapPosition = function(peoples) {
   // google map center position - first matched user from array, if any :
@@ -51,26 +22,54 @@ var calculateGMapPosition = function(peoples) {
   return [0,0]
 };
 
-// Produce peoples markers string in form "lng1,lat1,name1;lng2,lat2,name2" for further easy parsing
-var getPeoplesMarkers = function(peoples) {
+var getMarkerName = function(person) {
+  return (person.firstname + ' ' + person.lastname + ' at ' + person.home_address);
+}
+
+var getPeoplesMarkers = function(peoples, callback) {
   var peoplesLength = peoples.length;
-  var markers = "";
-  for (var i = 0; i < peoplesLength; i++) {
-    if (i > 0) markers += ';';
-    var person = peoples[i];
-    var lng = person.loc[0],
-        lat = person.loc[1],
-    // quickFix: replace our 'special' symbols if they occurs in concatenated string
-        markerName = (person.firstname + ' ' + person.lastname + ' at ' + person.home_address).split(',').join(' ').split(';').join(' ');
-    markers += (lng + ',' + lat + ',' + markerName);
-  }
-  return markers;
+  async.mapSeries(peoples, function(person, peoplesCb) {
+    Peoples.getFamilyMembers(person, function (err, families) {
+      if (err) return peoplesCb(err);
+      var marker = {
+        markerTitle: getMarkerName(person),
+        lng: person.loc[0],
+        lat: person.loc[1],
+        address: Peoples.getAddressStr(person),
+        phone: Peoples.getPhoneStr(person),
+        fullName: Peoples.getFullNameStr(person),
+        families: Peoples.getFamilyMembersStrArray(families)
+      };
+      peoplesCb(null, marker);
+  });
+  }, function(err, peopleMarkers) {
+    callback(err, peopleMarkers);
+  });
 };
+
+var dbErrorRespond = function(res, err) {
+  var errorMsg = 'Peoples fetching error: _ERR'.replace('_ERR', err);
+  console.error(errorMsg);
+  return res.send(errorMsg);
+}
+
 
 /* GET users listing. */
 router.get('/', function (req, res) {
   res.render('search', {title: 'Search'});
 });
+
+/* Render with the given peoples data
+   gMapPosition - optional map position, object with {lng:, lat:} properties. If it eq null, map will be auto-centered.
+*/
+var respondWithSearchResults = function(res, err, peoples, gMapPosition) {
+  if (err) return dbErrorRespond(res, err);
+  getPeoplesMarkers(peoples, function (err, peopleMarkers) {
+    if (err) return dbErrorRespond(res, err);
+    var gMapPos = (gMapPosition == null) ? calculateGMapPosition(peoples) : gMapPosition;
+    res.render("search_results", {peoples: peoples, peopleMarkers: peopleMarkers, gMapPos: gMapPos});
+  });
+}
 
 router.post('/', function (req, res) {
   var attrHash = req.body;
@@ -82,31 +81,26 @@ router.post('/', function (req, res) {
   }
   switch (search_type) {
     case 'city':
-      findPeoplesByCity(search_term, function (err, results) {
-        var gMapPos = calculateGMapPosition(results);
-        var markers = getPeoplesMarkers(results);
-        res.render("search_results", {peoples: results, gMapPos: gMapPos, markers: markers});
+      Peoples.findPeoplesByCity(search_term, function (err, peoples) {
+        respondWithSearchResults(res, err, peoples, null);
       });
       break;
     case 'street':
-      findPeoplesByStreetAddress(search_term, function (err, results) {
-        var gMapPos = calculateGMapPosition(results);
-        var markers = getPeoplesMarkers(results);
-        res.render("search_results", {peoples: results, gMapPos: gMapPos, markers: markers});
+      Peoples.findPeoplesByStreetAddress(search_term, function (err, peoples) {
+        respondWithSearchResults(res, err, peoples, null);
       });
       break;
     case 'loc':
       var search_term_params = search_term.split(',');
       if (search_term_params.length != 3) {
         res.send("Incorrect search term syntax used.");
-        return;
+        break;
       }
       var lng = parseFloat(search_term_params[0]),
         lat = parseFloat(search_term_params[1]),
         rad = parseFloat(search_term_params[2]);
-      findPeoplesByLoc(lng, lat, rad, function (err, results) {
-        var markers = getPeoplesMarkers(results);
-        res.render("search_results", {peoples: results, gMapPos: [lng, lat], markers: markers});
+      Peoples.findPeoplesByLoc(lng, lat, rad, function (err, peoples) {
+        respondWithSearchResults(res, err, peoples, {lng: lng, lat: lat});
       });
       break;
     default:
