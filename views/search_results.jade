@@ -22,10 +22,11 @@ section
           td= user.home_city
           td= user.home_address
 
+    script var peopleMarkers = !{JSON.stringify(peopleMarkers)}
+
     script(type='text/javascript').
       var gMapPosArray = '#{gMapPos}'.split(",");
       var lng = gMapPosArray[0];
       var lat = gMapPosArray[1];
-      var markers = '#{markers}';
-      initMap(lng, lat, markers); //- TODO: pass people data to initMap
+      initMap(lng, lat, peopleMarkers);
 
