@@ -11,6 +11,7 @@ section
           td gender
           td city
           td address
+          td ZIP code
       tbody
       for user in peoples
         tr
@@ -19,6 +20,8 @@ section
           td= user.gender
           td= user.home_city
           td= user.home_address
+          td= user.home_postcode
+
 
     script(type='text/javascript').
       var gMapPosArray = '#{gMapPos}'.split(",");

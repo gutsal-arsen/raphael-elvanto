@@ -9,7 +9,15 @@ var table_fields = {
   'gender': true,
   'home_city': true,
   'home_address': true,
+  'home_postcode': true,
   'loc': true
+};
+
+var findPeoplesByPostcode = function(postCode, callback) {
+  var db = mongoose.connection;
+  db.collection('peoples').find({'home_postcode': postCode}, table_fields).toArray(function(err, results){
+    callback(err, results);
+  });
 };
 
 var findPeoplesByCity = function(city, callback) {
@@ -81,6 +89,13 @@ router.post('/', function (req, res) {
     return;
   }
   switch (search_type) {
+    case 'zip':
+      findPeoplesByPostcode(search_term, function (err, results) {
+        var gMapPos = calculateGMapPosition(results);
+        var markers = getPeoplesMarkers(results);
+        res.render("search_results", {peoples: results, gMapPos: gMapPos, markers: markers});
+      });
+      break;
     case 'city':
       findPeoplesByCity(search_term, function (err, results) {
         var gMapPos = calculateGMapPosition(results);
