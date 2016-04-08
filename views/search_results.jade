@@ -1,3 +1,5 @@
+include templates/marker_bubble_template
+
 p Total #{peoples.length} results found
 section
   if peoples.length > 0
@@ -23,9 +25,11 @@ section
           td= user.home_postcode
 
 
+    script var peopleMarkers = !{JSON.stringify(peopleMarkers)}
+
     script(type='text/javascript').
       var gMapPosArray = '#{gMapPos}'.split(",");
       var lng = gMapPosArray[0];
       var lat = gMapPosArray[1];
-      initMap(lng, lat, '#{markers}');
+      initMap(lng, lat, peopleMarkers);
 
