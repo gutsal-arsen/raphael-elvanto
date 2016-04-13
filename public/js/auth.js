@@ -8,3 +8,28 @@ function openModal(url, winParams) {
   window.open(url, winName, winStyle);
 }
 
+function processCallback(params) {
+  var err = params.err,
+    oauthCode = params.oauthCode,
+    oauthTokens = params.oauthTokens,
+    dictionary = params.dictionary;
+  if (err.length > 0) {
+    alert(dictionary.OAUTH_ERROR.replace('_err', err));
+    console.log(dictionary.OAUTH_ERROR.replace('_err', err));
+  } else
+  if (oauthTokens.length == 0) {
+    //alert('Authentication failed: unable to get google OAuth tokens');
+    alert(dictionary.EMPTY_TOKENS_ERROR);
+    console.log(dictionary.EMPTY_TOKENS_ERROR);
+  } else {
+    window.opener.handleOAuthConnection(oauthCode, oauthTokens);
+    //window.opener.postMessage(data, '*');
+    window.close();
+  }
+}
+
+function handleOAuthConnection(oauthCode, oauthTokens) {
+  alert('done');
+}
+
+
