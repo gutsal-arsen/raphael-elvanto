@@ -1,0 +1,24 @@
+extends layout
+
+block js
+  script(src='components/jquery/dist/jquery.min.js')
+  script(src='/js/auth.js')
+
+block content
+
+  .loader
+  .dot
+  .dot
+  .dot
+  .dot
+  .dot
+  .dot
+  .dot
+  .dot
+
+  script(type='text/javascript').
+    $(function () {
+      var authUrl = '!{authUrl}';
+      var winParams = !{JSON.stringify(winParams)};
+      openModal(authUrl, winParams);
+    });
