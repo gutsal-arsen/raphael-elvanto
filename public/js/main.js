@@ -26,6 +26,11 @@ var handlers = {
     $('input[type=file]').click();
   },
 
+  exportGoogleContacts: function (e) {
+    // redirect for now
+    window.location = '/auth';
+  },
+
   search: function (e) {
     $.get({
       url: '/search',
