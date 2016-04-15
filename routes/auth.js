@@ -19,10 +19,10 @@ const
     name: 'Google API connection..'
   };
 
-var clientId = '496763035843-c6mvu1i7qtsf440ckhhnl2bbnpjt45j0.apps.googleusercontent.com';
-var clientSecret = 'yjngXueViMkwwEhnas0mu3kx';
-var serverApiKey = 'AIzaSyDdxq55gM6Sqes71nmTH6ZV7gaojN9TPU4';
-var redirectUrl = 'http://elvanto.org:3000/auth/callback';
+var clientId = process.env.GOOGLE_CLIENT_ID;
+var clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+var serverApiKey = process.env.GOOGLE_SERVER_API_KEY;
+var redirectUrl = process.env.GOOGLE_REDIRECT_URL;
 
 var oauth2Client = null;
 
