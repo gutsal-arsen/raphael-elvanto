@@ -1,15 +1,198 @@
 doctype html
 html(lang='en')
   head
-    meta(charset='UTF-8')
-    meta(name='viewport', content='width=device-width')
+    meta(charset='utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
     title= title
+
     block css
       link(rel='stylesheet', href='/css/style.css')
+
+    // + COMMON TEMPLATE CSS
+    //link(rel='stylesheet', href='libs/assets/animate.css/animate.css')
+    link(rel='stylesheet', href='libs/assets/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', href='libs/assets/simple-line-icons/css/simple-line-icons.css')
+    link(rel='stylesheet', href='libs/jquery/bootstrap/dist/css/bootstrap.css')
+    link(rel='stylesheet', href='css/template/font.css')
+    link(rel='stylesheet', href='css/template/app.css')
+
     block js
       if ENV_DEVELOPMENT
         script(src='http://localhost:35729/livereload.js')
-      script(src='/js/main.js')
-      script(src='/components/jquery/dist/jquery.min.js')
+      script(src='components/jquery/dist/jquery.min.js')
+      script(src='components/mustache.js/mustache.min.js')
+      script(src='js/main.js')
+
+
   body
-    block content
+    #app.app.app-header-fixed(ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}", ui-view='')
+      .app-header.navbar
+        .navbar-header.bg-black
+          button.pull-right.visible-xs.dk(ui-toggle-class='show', data-target='.navbar-collapse')
+            i.glyphicon.glyphicon-cog
+          button.pull-right.visible-xs(ui-toggle-class='off-screen', data-target='.app-aside', ui-scroll-to='app')
+            i.glyphicon.glyphicon-align-justify
+          a.navbar-brand.text-lt(href='#/')
+            i.fa.fa-btc
+            //img.hide(src='img/logo.png', alt='.')
+            span.hidden-folded.m-l-xs.ng-binding Elvanto
+        .collapse.pos-rlt.navbar-collapse.box-shadow.bg-white-only
+          .nav.navbar-nav.hidden-xs
+            a.btn.no-shadow.navbar-btn(href='', ng-click='app.settings.asideFolded = !app.settings.asideFolded')
+              i.fa.fa-dedent.fa-fw
+            a.btn.no-shadow.navbar-btn(href='', ui-toggle-class='show', target='#aside-user')
+              i.icon-user.fa-fw
+          form.navbar-form.navbar-form-sm.navbar-left.shift.ng-pristine.ng-valid.ng-scope(ui-shift='prependTo', target='.navbar-collapse', role='search', ng-controller='TypeaheadDemoCtrl')
+            .form-group
+              .input-group
+                input.form-control.input-sm.bg-light.no-border.rounded.padder.ng-pristine.ng-untouched.ng-valid(type='text', ng-model='selected', typeahead='state for state in states | filter:$viewValue | limitTo:8', placeholder='Search projects...', aria-autocomplete='list', aria-expanded='false', aria-owns='typeahead-24-7167', aria-invalid='false')
+                span.input-group-btn
+                  button.btn.btn-sm.bg-light.rounded(type='submit')
+                    i.fa.fa-search
+          ul.nav.navbar-nav.navbar-right
+            li.dropdown.hidden-sm(is-open='lang.isopen', dropdown='')
+              a.dropdown-toggle.ng-binding(href='', dropdown-toggle='', aria-haspopup='true', aria-expanded='false')
+                | English
+                b.caret
+              ul.dropdown-menu.animated.fadeInRight.w
+                li.ng-scope(ng-repeat='(langKey, label) in langs')
+                  a.ng-binding(ng-click='setLang(langKey, $event)', href='') English
+                li.ng-scope(ng-repeat='(langKey, label) in langs')
+                  a.ng-binding(ng-click='setLang(langKey, $event)', href='') German
+                li.ng-scope(ng-repeat='(langKey, label) in langs')
+                  a.ng-binding(ng-click='setLang(langKey, $event)', href='') Italian
+            li.hidden-xs
+              a(ui-fullscreen='')
+                i.fa.fa-expand.fa-fw.text
+                i.fa.fa-compress.fa-fw.text-active
+            li.dropdown(dropdown='')
+              a.dropdown-toggle(href='', dropdown-toggle='', aria-haspopup='true', aria-expanded='false')
+                i.icon-bell.fa-fw
+                span.visible-xs-inline Notifications
+                span.badge.badge-sm.up.bg-danger.pull-right-xs 2
+              .dropdown-menu.w-xl.animated.fadeInUp
+                .panel.bg-white
+                  .panel-heading.b-light.bg-light
+                    strong
+                      | You have
+                      span 2
+                      |  notifications
+                  .list-group
+                    a.list-group-item(href='')
+                      span.pull-left.m-r.thumb-sm
+                        //img.img-circle(src='img/user.jpg', alt='...')
+                      span.clear.block.m-b-none
+                        | Use awesome animate.css
+                        br
+                        small.text-muted 10 minutes ago
+                    a.list-group-item(href='')
+                      span.clear.block.m-b-none
+                        | 1.0 initial released
+                        br
+                        small.text-muted 1 hour ago
+                  .panel-footer.text-sm
+                    a.pull-right(href='')
+                      i.fa.fa-cog
+                    a(href='#notes', data-toggle='class:show animated fadeInRight') See all the notifications
+              // / dropdown
+            li.dropdown(dropdown='')
+              a.dropdown-toggle.clear(href='', dropdown-toggle='', aria-haspopup='true', aria-expanded='false')
+                span.thumb-sm.avatar.pull-right.m-t-n-sm.m-b-n-sm.m-l-sm
+                  //img(src='img/user.jpg', alt='...')
+                  i.on.md.b-white.bottom
+                span.hidden-sm.hidden-md John.Smith
+                b.caret
+              // dropdown
+              ul.dropdown-menu.animated.fadeInRight.w
+                li.wrapper.b-b.m-b-sm.bg-light.m-t-n-xs
+                  div
+                    p 300mb of 500mb used
+                  .progress-xs.m-b-none.bg-white.progress.ng-isolate-scope(value='60')
+                    .progress-bar(ng-class="type && 'progress-bar-' + type", role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', ng-style="{width: percent + '%'}", aria-valuetext='60%', ng-transclude='', style='width: 60%;')
+                li
+                  a(href='')
+                    span.badge.bg-danger.pull-right 30%
+                    span Settings
+                li
+                  a(ui-sref='app.page.profile', href='#/app/page/profile') Profile
+                li
+                  a(ui-sref='app.docs', href='#/app/docs')
+                    span.label.bg-info.pull-right new
+                    |                   Help
+                li.divider
+                li
+                  a(ui-sref='access.signin', href='#/access/signin') Logout
+      .app-aside.hidden-xs.bg-black(data-ng-include=" 'tpl/blocks/aside.html' ")
+        .aside-wrap.ng-scope
+          .navi-wrap
+            #aside-user.clearfix.hidden-xs.text-center.hide
+              .dropdown.wrapper(dropdown='')
+                a(ui-sref='app.page.profile', href='#/app/page/profile')
+                  span.thumb-lg.w-auto-folded.avatar.m-t-sm
+                    //img.img-full(src='img/user.jpg', alt='...')
+                a.dropdown-toggle.hidden-folded(href='', dropdown-toggle='', aria-haspopup='true', aria-expanded='false')
+                  span.clear
+                    span.block.m-t-sm
+                      strong.font-bold.text-lt John.Smith
+                      b.caret
+                    span.text-muted.text-xs.block Art Director
+                // dropdown
+                ul.dropdown-menu.animated.fadeInRight.w.hidden-folded
+                  li.wrapper.b-b.m-b-sm.bg-info.m-t-n-xs
+                    span.arrow.top.hidden-folded.arrow-info
+                    div
+                      p 300mb of 500mb used
+                    .progress-xs.m-b-none.dker.progress.ng-isolate-scope(value='60', type='white')
+                      .progress-bar.progress-bar-white(ng-class="type && 'progress-bar-' + type", role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', ng-style="{width: percent + '%'}", aria-valuetext='60%', ng-transclude='', style='width: 60%;')
+                  li
+                    a(href='') Settings
+                  li
+                    a(ui-sref='app.page.profile', href='#/app/page/profile') Profile
+                  li
+                    a(href='')
+                      span.badge.bg-danger.pull-right 3
+                      |               Notifications
+                  li.divider
+                  li
+                    a(ui-sref='access.signin', href='#/access/signin') Logout
+              .line.dk.hidden-folded
+            nav.navi.clearfix.ng-scope(ui-nav='', ng-include="'tpl/blocks/nav_simple.html'")
+              ul.nav.ng-scope
+                li.hidden-folded.padder.m-t.m-b-sm.text-muted.text-xs
+                  span.ng-scope(translate='aside.nav.HEADER') Navigation
+                li
+                  a.auto(href='/')
+                    i.glyphicon.glyphicon-list
+                    span.font-bold Import contacts
+                li
+                  a.auto(href='/search')
+                    i.glyphicon.glyphicon-search
+                    span.font-bold Search
+      .app-content.ng-scope
+        .butterbar.hide(ui-butterbar='')
+          span.bar
+        a.off-screen-toggle.hide(href='', ui-toggle-class='off-screen', data-target='.app-aside')
+        .app-content-body.fade-in-up.ng-scope(ui-view='')
+          .hbox.hbox-auto-xs.hbox-auto-sm.ng-scope
+            .col
+              .bg-light.lter.b-b.wrapper-md
+                .row
+                  .col-sm-6.col-xs-12
+                    h1.m-n.font-thin.h3.text-black Elvanto
+                    small.text-muted Welcome
+                  .col-sm-6.text-right.hidden-xs
+              .wrapper-md
+                .panel.wrapper
+                  block content
+
+
+      // footer
+      .app-footer.wrapper.b-t.bg-light.ng-scope
+        span.pull-right.ng-binding
+          | version
+          a.m-l-sm.text-muted(href='', ui-scroll-to='app')
+            i.fa.fa-long-arrow-up
+        |     © 2016 Copyright.
+
