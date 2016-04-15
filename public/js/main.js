@@ -26,6 +26,11 @@ var handlers = {
     $('input[type=file]').click();
   },
 
+  exportGoogleContacts: function (e) {
+    // redirect for now
+    window.location = '/auth';
+  },
+
   search: function (e) {
     $.get({
       url: '/search',
@@ -79,31 +84,56 @@ document.onreadystatechange = function (e) {
   }
 };
 
-function initMap(lng, lat, serializedMarkers) {
-  var mapDiv = document.getElementById('map');
+function getMarkerBubbleContent(bubble_data) {
+  var bubble_template = $('#marker_bubble_template').html();
+  return Mustache.render(bubble_template, bubble_data);
+}
 
+function addMarkerBubble(map, gMapMarker, personMarker) {
+  var bubbleData = {
+    full_name: personMarker.fullName,
+    address: personMarker.address,
+    phone: personMarker.phone,
+    families: personMarker.families
+  };
+  gMapMarker['bubble'] = new google.maps.InfoWindow({
+    content: getMarkerBubbleContent(bubbleData)
+  });
+
+  google.maps.event.addListener(gMapMarker, 'click', function() {
+    var bubble = this['bubble'];
+    bubble.isOpened === undefined ? bubble.isOpened = false : bubble.isOpened = !bubble.isOpened;
+    bubble.isOpened ? bubble.close() : bubble.open(map, this);
+  });
+}
+
+function initMap(lng, lat, peopleMarkers) {
+  var mapDiv = document.getElementById('map');
   var map = new google.maps.Map(mapDiv, {
     center: {lat: parseFloat(lat), lng: parseFloat(lng)},
     zoom: 8
   });
-
   var googleMarkers = [];
+  var peopleMarkersLength = peopleMarkers.length;
 
-  var markersArray = serializedMarkers.split(';');
-  var markersLength = markersArray.length;
-  for (var i = 0; i < markersLength; i++) {
-    var markerLngLatTitle = markersArray[i].split(',');
-    var lng = parseFloat(markerLngLatTitle[0]),
-        lat = parseFloat(markerLngLatTitle[1]),
-        title = markerLngLatTitle[2];
+  // put markers on the map
+  for (var i = 0; i < peopleMarkersLength; i++) {
+    var personMarker = peopleMarkers[i];
+    var lng = parseFloat(personMarker.lng),
+        lat = parseFloat(personMarker.lat),
+        title = personMarker.markerTitle;
     var latLng = {lat: lat, lng: lng};
-    var marker = new google.maps.Marker({
+
+    var gMapMarker = new google.maps.Marker({
       position: latLng,
       map: map,
       title: title
     });
-    googleMarkers.push(marker);
+
+    addMarkerBubble(map, gMapMarker, personMarker);
+    googleMarkers.push(gMapMarker);
   }
+
   if (googleMarkers.length > 0) {
     // Make all markers fit screen
     var bounds = new google.maps.LatLngBounds();

@@ -1,0 +1,12 @@
+extends layout
+block js
+  script(src='components/jquery/dist/jquery.min.js')
+  script(src='/js/auth.js')
+block content
+  script(type='text/javascript').
+    var oauthCode = '#{oauth_code}';
+    var oauthTokens = !{JSON.stringify(oauth_tokens)};
+    var dictionary = !{JSON.stringify(dictionary)};
+    var err = '#{err}';
+    var callbackParams = { oauthCode: oauthCode, oauthTokens: oauthTokens, dictionary: dictionary, err: err };
+    processCallback(callbackParams);

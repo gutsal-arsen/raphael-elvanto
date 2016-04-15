@@ -1,6 +1,10 @@
+include templates/marker_bubble_template
+
 p Total #{peoples.length} results found
 section
-  .left_block
+  if peoples.length > 0
+    div#map
+    br
     table.search_results
       thead
         tr
@@ -9,6 +13,7 @@ section
           td gender
           td city
           td address
+          td ZIP code
       tbody
       for user in peoples
         tr
@@ -17,12 +22,14 @@ section
           td= user.gender
           td= user.home_city
           td= user.home_address
-  .right_block
-    div#map
+          td= user.home_postcode
 
-script(type='text/javascript').
-  var gMapPosArray = '#{gMapPos}'.split(",");
-  var lng = gMapPosArray[0];
-  var lat = gMapPosArray[1];
-  initMap(lng, lat, '#{markers}');
+
+    script var peopleMarkers = !{JSON.stringify(peopleMarkers)}
+
+    script(type='text/javascript').
+      var gMapPosArray = '#{gMapPos}'.split(",");
+      var lng = gMapPosArray[0];
+      var lat = gMapPosArray[1];
+      initMap(lng, lat, peopleMarkers);
 

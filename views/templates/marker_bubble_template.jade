@@ -1,0 +1,15 @@
+script#marker_bubble_template(type='text/html').
+  <b>{{full_name}}</b>
+  <hr/>
+  Address: {{address}}
+  <br/>
+  Phone {{phone}}
+  <hr/>
+  <b>FAMILY MEMBERS</b>
+  <br>
+
+  {{#families}}
+    <ul style="list-style-type: square">
+      <li>{{.}}</li>
+    </ul>
+  {{/families}}
