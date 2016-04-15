@@ -29,7 +29,23 @@ function processCallback(params) {
 }
 
 function handleOAuthConnection(oauthCode, oauthTokens) {
-  alert('done');
+  $('body').html('oauthCode = ' + oauthCode + '<br/>oauthTokens = ' + oauthTokens +
+    'Elvanto to Google Contacts export started. Please wait..');
+  $.post({
+    url: '/crawl/elvanto_to_google',
+    method: 'POST',
+    data: {
+      oauth_code: oauthCode,
+      oauth_tokens: oauthTokens
+    },
+    complete: function (response) {
+    },
+    success: function (response, status) {
+      $('body').html(response);
+      alert('Export finished');
+      window.location = '/'
+    }
+  });
 }
 
 
