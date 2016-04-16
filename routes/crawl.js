@@ -1,6 +1,8 @@
 var express = require('express');
 var request = require('request');
 
+var xml = require('xml');
+
 var mongoose = require('mongoose');
 
 mongoose.connect("mongodb://localhost/elvanto");
@@ -145,18 +147,13 @@ router.get('/', function (req, res) {
           json: true
         }, function (error, response, body) {
           person.info = body.person[0];
-
-          //People.save(person, function(a,b,c){
-          //  console.log(a,b,c);
-          //})
-          var p = body.person[0];
+          var p = person.info;
 
           geocoder.geocode({
             address: p.home_city + ", " + p.home_address + ", " + p.home_address2,
             country: p.home_country,
             zipcode: p.home_postcode
           }, function (value, data) {
-            //console.log(value, data);
 
             if (data.length) {
               p.loc = [data[0].longitude, data[0].latitude];
@@ -181,13 +178,14 @@ router.get('/', function (req, res) {
 });
 
 router.post('/elvanto_to_google', function (req, res) {
+  debugger;
   var attrHash = req.body;
   var oauthCode = attrHash['oauth_code'],
       oauthTokens = attrHash['oauth_tokens'];
 
   var accessToken = oauthTokens.access_token;
   // TODO: example to real contacts
-  getExampleElvantoContacts(function (err, peoples) {
+  getElvantoContacts(function (err, peoples) {
     if (err) {
       return res.send("An error getElvantoContacts: " + err );
     }
@@ -196,36 +194,43 @@ router.post('/elvanto_to_google', function (req, res) {
         return res.send("An error createGoogleContactGroup: " + err );
       }
       // TODO: rewrite loop
-      for (var person in peoples) {
-        createGoogleContact(person, groupName, accessToken);
+      for (var idx in peoples) {
+        createGoogleContact(peoples[idx], groupName, accessToken);
       }
       return res.send("Ok");
     })
   });
 });
 
-var getExampleElvantoContacts = function(callback) {
-  var table_fields = {
-    'firstname': true,
-    'lastname': true,
-    'email': true,
-    'phone': true,
-    'home_city': true,
-    'home_address': true
-  };
-  People.find({id: "af472139-e8bb-11e4-af42-0673d9c9b5d6"}, table_fields, function(err, peoples) {
-    callback(err, peoples);
-  });
-};
+// var getExampleElvantoContacts = function(callback) {
+//   var table_fields = {
+//     'firstname': true,
+//     'lastname': true,
+//     'email': true,
+//     'phone': true,
+//     'home_city': true,
+//     'home_address': true
+//   };
+//   debugger;
+//   People.find({id: "1678d3b4-b5d5-11e3-a859-2ea7bbb4568f"}, table_fields, function(err, peoples) {
+//     callback(err, peoples);
+//   });
+// };
 
 var getElvantoContacts = function (callback) {
   var table_fields = {
+    '_id': true,
     'firstname': true,
     'lastname': true,
     'email': true,
     'phone': true,
+    'mobile': true,
     'home_city': true,
-    'home_address': true
+    'home_state': true,
+    'home_country': true,
+    'home_address': true,
+    'home_address2': true,
+    'home_postcode': true,
   };
   People.find({}, table_fields, function(err, peoples) {
     callback(err, peoples);
@@ -240,55 +245,51 @@ var createGoogleContactGroup = function(groupName, accessToken, callback) {
 var createGoogleContact = function(contact, groupName, accessToken, callback) {
   // TODO: groupName is not used yet
   /* TODO: Contact as a proxy model for Google contact entity:
-   Contact.storeOne(person, function (err, body) {   }); */
-  var atomXml =
-    "<atom:entry xmlns:atom='http://www.w3.org/2005/Atom' xmlns:gd='http://schemas.google.com/g/2005'>" +
-    "<atom:category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/contact/2008#contact'/>" +
-    "<gd:name> " +
-    "  <gd:givenName>_GIVENNAME_</gd:givenName> " +
-    "  <gd:familyName>_FAMILYNAME_</gd:familyName> " +
-    "  <gd:fullName>_FULLNAME_</gd:fullName> " +
-    "</gd:name> " +
-    "<atom:content type='text'>Notes</atom:content> " +
-    "<gd:email rel='http://schemas.google.com/g/2005#work' primary='true' address='_WORKEMAIL_'" +
-    "<gd:email rel='http://schemas.google.com/g/2005#home' address='_HOMEEMAIL_'/> " +
-    "<gd:phoneNumber rel='http://schemas.google.com/g/2005#work' primary='true'>_WORKPHONENUMBER_</gd:phoneNumber> " +
-    "<gd:phoneNumber rel='http://schemas.google.com/g/2005#home'>_HOMEPHONENUMBER_</gd:phoneNumber> " +
-    "<gd:structuredPostalAddress rel='http://schemas.google.com/g/2005#work' primary='true'> " +
-    "<gd:city>_HOMECITY_</gd:city> " +
-    "<gd:street>_HOMESTREET_</gd:street> " +
-    "<gd:region>_HOMEREGION_</gd:region> " +
-    "<gd:postcode>_HOMEPOSTALCODE_</gd:postcode> " +
-    "<gd:country>_HOMECOUNTRY_</gd:country> " +
-    "<gd:formattedAddress>_HOMEFORMATTEDADDRESS_</gd:formattedAddress> " +
-    "</gd:structuredPostalAddress> " +
-    "</atom:entry> ";
+     Contact.storeOne(person, function (err, body) {   }); */
+  var xmlString = xml({
+    "atom:entry": [{
+      _attr: {
+        "xmlns:atom": "http://www.w3.org/2005/Atom",
+        "xmlns:gd": "http://schemas.google.com/g/2005"
+      }
+    },{
+      "atom:category": [{
+        _attr: {
+          scheme:"http://schemas.google.com/g/2005#kind",
+          term:"http://schemas.google.com/contact/2008#contact"
+        }
+      }]},
+                   {"id": contact._id},
+                   {"gd:email": contact.email},
+                   {"gd:phoneNumber":contact.phone},
+                   {"gd:phoneNumber": contact.mobile},
+                   {"gd:structuredPostalAddress": [
+                     {"gd:city": contact.home_city},
+                     {"gd:streed": contact.home_address + contact.home_address2},
+                     {"gd:region": contact.home_state},
+                     {"gd:postcode": contact.home_postcode},
+                     {"gd:conuntry": contact.home_country},
+                     {"gd:formattedAddress": contact.home_city + "," + contact.home_address + "," + contact.home_address2}
+                   ]},
+                   {"gd:name": [
+                     {"gd:givenName": contact.firstname},
+                     {"gd:familyName": contact.lastname},
+                     {"gd:fullName": contact.firstname + " " + contact.lastname},
+                   ]}
+                  ]});
 
-  var replacedAtomXml = atomXml
-    .replace(/_GIVENNAME_/g, contact.firstname)
-    .replace(/_FAMILYNAME_/g, contact.lastname)
-    .replace(/_FULLNAME_/g, contact.firstname + ' ' + contact.lastname)
-    .replace(/_WORKEMAIL_/g, contact.email)
-    .replace(/_HOMEEMAIL_/g, contact.email)
-    .replace(/_WORKPHONENUMBER_/g, contact.phone)
-    .replace(/_HOMEPHONENUMBER_/g, contact.phone)
-    .replace(/_HOMECITY_/g, contact.home_city)
-    .replace(/_HOMESTREET_/g, contact.home_address)
-    .replace(/_HOMEREGION_/g, '')
-    .replace(/_HOMEPOSTALCODE_/g, contact.home_postcode)
-    .replace(/_HOMECOUNTRY_/g, contact.home_country)
-    .replace(/_HOMEFORMATTEDADDRESS_/g, contact.home_address);
+  console.log(xmlString);
 
-  request({
-    method: 'POST',
+  request.post({
     uri: 'https://www.google.com/m8/feeds/contacts/default/full/',
     contentType: 'application/atom+xml',
     headers: {
-      'Authorization': 'Bearer ' + accessToken
+      'Authorization': 'Bearer ' + accessToken,
+      'GData-Version': '3.0'
     },
-    json: true,
-    body: replacedAtomXml
+    body: xmlString
   }, function (error, response, body) {
+    console.log(error,  body);
     return;
   });
 }

@@ -1,9 +1,13 @@
 require('dotenv').config();
 // add git-ignored .env file in project root with envkey=envvalue content lines:
-if (undefined === (process.env.GOOGLE_CLIENT_ID)) throw 'Env var GOOGLE_CLIENT_ID is not defined';
-if (undefined === (process.env.GOOGLE_CLIENT_SECRET)) throw 'Env var GOOGLE_CLIENT_SECRET is not defined';
-if (undefined === (process.env.GOOGLE_REDIRECT_URL)) throw 'Env var GOOGLE_REDIRECT_URL is not defined';
-if (undefined === (process.env.GOOGLE_SERVER_API_KEY)) throw 'Env var GOOGLE_SERVER_API_KEY is not defined';
+// if (undefined === (process.env.GOOGLE_CLIENT_ID)) throw 'Env var GOOGLE_CLIENT_ID is not defined';
+// if (undefined === (process.env.GOOGLE_CLIENT_SECRET)) throw 'Env var GOOGLE_CLIENT_SECRET is not defined';
+// if (undefined === (process.env.GOOGLE_REDIRECT_URL)) throw 'Env var GOOGLE_REDIRECT_URL is not defined';
+// if (undefined === (process.env.GOOGLE_SERVER_API_KEY)) throw 'Env var GOOGLE_SERVER_API_KEY is not defined';
+
+['CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URL', 'SERVER_API_KEY'].forEach((key, val) => {
+  if(process.env['GOOGLE_' + key] === undefined) throw 'Env var ' + 'GOOGLE_' + key + ' is not defined'
+})
 
 var express = require('express');
 var path = require('path');
