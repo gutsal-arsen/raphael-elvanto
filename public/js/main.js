@@ -32,9 +32,8 @@ var handlers = {
   },
 
   search: function (e) {
-    $.get({
+    $.post({
       url: '/search',
-      method: 'POST',
       data: {
         search_type: $('select#search_type').val(),
         search_term: $('input#search_term').val()
