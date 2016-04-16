@@ -7,7 +7,7 @@
 
 var handlers = {
   importElvanto: function (e) {
-    $.get({
+    $.ajax({
       url: '/crawl',
       method: 'GET',
       beforeSend: function () {
@@ -32,8 +32,9 @@ var handlers = {
   },
 
   search: function (e) {
-    $.post({
+    $.ajax({
       url: '/search',
+      method: 'POST',
       data: {
         search_type: $('select#search_type').val(),
         search_term: $('input#search_term').val()
