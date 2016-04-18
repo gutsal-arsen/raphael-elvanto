@@ -178,7 +178,7 @@ router.get('/', function (req, res) {
 });
 
 router.post('/elvanto_to_google', function (req, res) {
-  debugger;
+  //debugger;
   var attrHash = req.body;
   var oauthCode = attrHash['oauth_code'],
       oauthTokens = attrHash['oauth_tokens'];
@@ -204,6 +204,7 @@ router.post('/elvanto_to_google', function (req, res) {
 
 // var getExampleElvantoContacts = function(callback) {
 //   var table_fields = {
+//     '_id': true,
 //     'firstname': true,
 //     'lastname': true,
 //     'email': true,
@@ -211,8 +212,7 @@ router.post('/elvanto_to_google', function (req, res) {
 //     'home_city': true,
 //     'home_address': true
 //   };
-//   debugger;
-//   People.find({id: "1678d3b4-b5d5-11e3-a859-2ea7bbb4568f"}, table_fields, function(err, peoples) {
+//   People.find({id: "af472139-e8bb-11e4-af42-0673d9c9b5d6"}, table_fields, function(err, peoples) {
 //     callback(err, peoples);
 //   });
 // };
@@ -260,21 +260,21 @@ var createGoogleContact = function(contact, groupName, accessToken, callback) {
         }
       }]},
                    {"id": contact._id},
-                   {"gd:email": contact.email},
-                   {"gd:phoneNumber":contact.phone},
-                   {"gd:phoneNumber": contact.mobile},
-                   {"gd:structuredPostalAddress": [
+                    contact.email ? {"gd:email": [{ _attr: { label: 'Personal', address: contact.email }}]} : {},
+                    contact.phone ? {"gd:phoneNumber": [{ _attr: {rel: "http://schemas.google.com/g/2005#home"}}, contact.phone]} : {},
+                    contact.mobile ? {"gd:phoneNumber": [{ _attr: {rel: "http://schemas.google.com/g/2005#mobile"}}, contact.mobile]} : {},
+                   {"gd:structuredPostalAddress": [ {_attr: {rel: "http://schemas.google.com/g/2005#work"}},
                      {"gd:city": contact.home_city},
                      {"gd:streed": contact.home_address + contact.home_address2},
                      {"gd:region": contact.home_state},
                      {"gd:postcode": contact.home_postcode},
-                     {"gd:conuntry": contact.home_country},
+                     {"gd:country": contact.home_country},
                      {"gd:formattedAddress": contact.home_city + "," + contact.home_address + "," + contact.home_address2}
                    ]},
                    {"gd:name": [
                      {"gd:givenName": contact.firstname},
                      {"gd:familyName": contact.lastname},
-                     {"gd:fullName": contact.firstname + " " + contact.lastname},
+                     {"gd:fullName": contact.firstname + " " + contact.lastname}
                    ]}
                   ]});
 
@@ -282,14 +282,15 @@ var createGoogleContact = function(contact, groupName, accessToken, callback) {
 
   request.post({
     uri: 'https://www.google.com/m8/feeds/contacts/default/full/',
-    contentType: 'application/atom+xml',
     headers: {
       'Authorization': 'Bearer ' + accessToken,
-      'GData-Version': '3.0'
+      'GData-Version': '3.0',
+      'Content-Type': 'application/atom+xml'
     },
     body: xmlString
   }, function (error, response, body) {
     console.log(error,  body);
+    console.log('Response status message: ' + response.statusMessage);
     return;
   });
 }
