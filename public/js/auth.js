@@ -31,7 +31,7 @@ function processCallback(params) {
 function handleOAuthConnection(oauthCode, oauthTokens) {
   $('body').html('oauthCode = ' + oauthCode + '<br/>oauthTokens = ' + oauthTokens +
     'Elvanto to Google Contacts export started. Please wait..');
-  $.post({
+  $.ajax({
     url: '/crawl/elvanto_to_google',
     method: 'POST',
     data: {
