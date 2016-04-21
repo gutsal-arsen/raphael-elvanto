@@ -14,8 +14,7 @@ Please, use keys from Google Developers Console. Make sure Contacts API and Maps
 
 ```
 GOOGLE_SERVER_API_KEY=AIzaSyDed9plfn5dYnS7U07yoD42MNkhjfw3-6Q
-GOOGLE_CLIENT_ID=999634658306-qdpkmejebothksusvcjr94c9r837arcm.apps.googleuserc\
-ontent.com
+GOOGLE_CLIENT_ID=999634658306-qdpkmejebothksusvcjr94c9r837arcm.apps.googleusercontent.com
 GOOGLE_CLIENT_SECRET=jNbmtTEbnIkv0cA2RoBnvPwp
 GOOGLE_REDIRECT_URL=http:localhost:3000/auth/callback   
 ```
