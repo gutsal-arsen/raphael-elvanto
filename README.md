@@ -10,6 +10,7 @@ npm install && bower install
 ```
 
 ## Creating `.env` file with keys
+Please, use keys from Google Developers Console. Make sure Contacts API and Maps API are enabled in the console.
 
 ```
 GOOGLE_SERVER_API_KEY=AIzaSyDed9plfn5dYnS7U07yoD42MNkhjfw3-6Q
