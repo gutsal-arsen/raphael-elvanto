@@ -23,12 +23,12 @@ html(lang='en')
         script(src='http://localhost:35729/livereload.js')
       script(src='components/jquery/dist/jquery.min.js')
       script(src='components/mustache.js/mustache.min.js')
-      script(src='js/ui-client.js')
       script(src='js/ui-jp.config.js')
       script(src='js/ui-jp.js')
       script(src='js/ui-load.js')
       script(src='js/ui-nav.js')
       script(src='js/ui-toggle.js')
+      script(src='js/ui-client.js')
       script(src='js/main.js')
 
 
@@ -46,9 +46,9 @@ html(lang='en')
             span.hidden-folded.m-l-xs.ng-binding Elvanto
         .collapse.pos-rlt.navbar-collapse.box-shadow.bg-white-only
           .nav.navbar-nav.hidden-xs
-            a.btn.no-shadow.navbar-btn(href='', ng-click='app.settings.asideFolded = !app.settings.asideFolded')
+            a.btn.no-shadow.navbar-btn(href='#', ui-toggle-class="app-aside-folded" target=".app" ng-click='app.settings.asideFolded = !app.settings.asideFolded')
               i.fa.fa-dedent.fa-fw
-            a.btn.no-shadow.navbar-btn(href='', ui-toggle-class='show', target='#aside-user')
+            a.btn.no-shadow.navbar-btn(href='#', ui-toggle-class='show', target='#aside-user')
               i.icon-user.fa-fw
           form.navbar-form.navbar-form-sm.navbar-left.shift.ng-pristine.ng-valid.ng-scope(ui-shift='prependTo', target='.navbar-collapse', role='search', ng-controller='TypeaheadDemoCtrl')
             .form-group
