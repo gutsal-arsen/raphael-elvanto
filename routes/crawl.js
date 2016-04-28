@@ -1,5 +1,6 @@
 var express = require('express');
 var request = require('request');
+var async = require('async');
 
 var xml = require('xml');
 
@@ -193,11 +194,21 @@ router.post('/elvanto_to_google', function (req, res) {
       if (err) {
         return res.send("An error createGoogleContactGroup: " + err );
       }
-      // TODO: rewrite loop
-      for (var idx in peoples) {
-        createGoogleContact(peoples[idx], groupName, accessToken);
-      }
-      return res.send("Ok");
+
+      var D = 1000;
+      var N = 10;
+
+      async.forEachLimit(peoples, N, function (person, callback) {
+        createGoogleContact(person, groupName, accessToken, function (err) {
+          setTimeout(function() {
+            callback(err);
+          }, D);
+        });
+      }, function (err) {
+        if (err) return res.send(err);
+        return res.send("Ok");
+      });
+
     })
   });
 });
@@ -290,7 +301,7 @@ var createGoogleContact = function(contact, groupName, accessToken, callback) {
     body: xmlString
   }, function (error, response, body) {
     console.log(error,  body);
-    return;
+    return callback(error);
   });
 }
 
