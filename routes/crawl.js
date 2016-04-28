@@ -301,6 +301,7 @@ var createGoogleContact = function(contact, groupName, accessToken, callback) {
     body: xmlString
   }, function (error, response, body) {
     console.log(error,  body);
+    response || console.log('Response status message: ' + response.statusMessage);
     return callback(error);
   });
 }
