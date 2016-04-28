@@ -290,7 +290,6 @@ var createGoogleContact = function(contact, groupName, accessToken, callback) {
     body: xmlString
   }, function (error, response, body) {
     console.log(error,  body);
-    console.log('Response status message: ' + response.statusMessage);
     return;
   });
 }
