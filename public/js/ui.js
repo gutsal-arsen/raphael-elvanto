@@ -1,4 +1,6 @@
 $(document).ready(() => {
+
+    $('#side-menu').metisMenu();
     /**
      if .icon-bell.badge content changed, we will either show or hide it
      */
