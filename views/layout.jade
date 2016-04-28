@@ -23,12 +23,14 @@ html(lang='en')
         script(src='http://localhost:35729/livereload.js')
       script(src='components/jquery/dist/jquery.min.js')
       script(src='components/mustache.js/mustache.min.js')
+      script(src='js/jquery.textchange.js')
       script(src='js/ui-jp.config.js')
       script(src='js/ui-jp.js')
       script(src='js/ui-load.js')
       script(src='js/ui-nav.js')
       script(src='js/ui-toggle.js')
       script(src='js/ui-client.js')
+      script(src='js/ui.js')
       script(src='js/main.js')
 
 
@@ -77,7 +79,7 @@ html(lang='en')
               a.dropdown-toggle(href='', dropdown-toggle='', aria-haspopup='true', aria-expanded='false')
                 i.icon-bell.fa-fw
                  span.visible-xs-inline Notifications
-                 span.badge.badge-sm.up.bg-danger.pull-right-xs.none 2
+                 span.badge.badge-sm.up.bg-danger.pull-right-xs.textchange.none 0
               .dropdown-menu.w-xl.animated.fadeInUp
                 .panel.bg-white
                   .panel-heading.b-light.bg-light
@@ -165,17 +167,48 @@ html(lang='en')
                     a(ui-sref='access.signin', href='#/access/signin') Logout
               .line.dk.hidden-folded
             nav.navi.clearfix.ng-scope(ui-nav='', ng-include="'tpl/blocks/nav_simple.html'")
-              ul.nav.ng-scope
+              ul.nav.ng-scope(style='display:block' id='side-menu')
                 li.hidden-folded.padder.m-t.m-b-sm.text-muted.text-xs
                   span.ng-scope(translate='aside.nav.HEADER') Navigation
                 li
                   a.auto(href='/')
-                    i.glyphicon.glyphicon-list
-                    span.font-bold Import contacts
+                    i.glyphicon.glyphicon-equalizer
+                    span.font-bold Analyze Data
+                  ul.nav.nav-second-level.collapse
+                    li
+                      a(href='/analyze/summary') Summary
+                    li
+                      a(href='/analyze/household') Household
+                    li
+                      a(href='/analyze/age_groups') Age Groups
+                    li
+                      a(href='/analyze/city_population') City Population
+                    li
+                      a(href='/analyze/gender') Gender
+                    li
+                      a(href='/analyze/martial_status') Martial Status
+                    li
+                      a(href='/analyze/language') Language
+                    li
+                      a(href='/analyze/sunday_school') Sunday School
+                    li
+                      a(href='/analyze/deacons_choir') Deacon Choir
+                    li.active
+                      a(href='/analyze/colleges') Colleges
                 li
                   a.auto(href='/search')
-                    i.glyphicon.glyphicon-search
-                    span.font-bold Search
+                    i.glyphicon.glyphicon-eye-open
+                    span.font-bold Visitation Planner
+                li
+                  a.auto(href='/')
+                    i.glyphicon.glyphicon-resize-full
+                    span.font-bold Import/Export
+                  ul.nav.nav-second-level.collapse
+                    li
+                      a(href='/') Import from Elvanto
+                    li
+                      a(href='/') Sync to Google Contacts
+
       .app-content.ng-scope
         .butterbar.hide(ui-butterbar='')
           span.bar
