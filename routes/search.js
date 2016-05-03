@@ -56,7 +56,8 @@ var dbErrorRespond = function(res, err) {
 
 /* GET users listing. */
 router.get('/', function (req, res) {
-  res.render('search', {title: 'Visitation Planner'});
+  var serverApiKey = process.env.GOOGLE_SERVER_API_KEY;
+  res.render('search', {title: 'Visitation Planner', serverApiKey: serverApiKey}});
 });
 
 /* Render with the given peoples data
