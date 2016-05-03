@@ -56,7 +56,7 @@ var dbErrorRespond = function(res, err) {
 
 /* GET users listing. */
 router.get('/', function (req, res) {
-  res.render('search', {title: 'Search'});
+  res.render('search', {title: 'Visitation Planner'});
 });
 
 /* Render with the given peoples data
