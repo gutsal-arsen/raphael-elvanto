@@ -5,8 +5,8 @@ require('dotenv').config();
 // if (undefined === (process.env.GOOGLE_REDIRECT_URL)) throw 'Env var GOOGLE_REDIRECT_URL is not defined';
 // if (undefined === (process.env.GOOGLE_SERVER_API_KEY)) throw 'Env var GOOGLE_SERVER_API_KEY is not defined';
 
-['CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URL', 'SERVER_API_KEY'].forEach((key, val) => {
-  if(process.env['GOOGLE_' + key] === undefined) throw 'Env var ' + 'GOOGLE_' + key + ' is not defined'
+['ELVANTO_KEY', 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'GOOGLE_REDIRECT_URL', 'GOOGLE_SERVER_API_KEY'].forEach((key, val) => {
+  if(process.env[key] === undefined) throw 'Env var ' + key + ' is not defined'
 })
 
 var express = require('express');

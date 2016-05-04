@@ -107,7 +107,7 @@ router.get('/', function (req, res) {
         request.post({
           uri: 'https://api.elvanto.com/v1/people/getInfo.json',
           auth: {
-            'user': 'ndCR8G79Qakqhhji1OeAQxHJAinI4ZSi:x',
+            'user': process.env.ELVANTO_KEY,
             'pass': '',
             'sendImmediately': true
           },
@@ -159,6 +159,10 @@ router.get('/', function (req, res) {
             if (data.length) {
               p.loc = [data[0].longitude, data[0].latitude];
 
+              var crypto = require('crypto');
+              var szObjectId = crypto.createHmac('sha1','').update(p.id).digest("hex"); // getting 40 chars string
+              szObjectId = szObjectId.substring(16); // truncating first 16 chars to get 24 hex string
+              p._id = mongoose.Types.ObjectId(szObjectId);delete p.id;
               new People(p).save(function (err, instance) {
                 console.log(err, instance);
               });
@@ -212,21 +216,6 @@ router.post('/elvanto_to_google', function (req, res) {
     })
   });
 });
-
-// var getExampleElvantoContacts = function(callback) {
-//   var table_fields = {
-//     '_id': true,
-//     'firstname': true,
-//     'lastname': true,
-//     'email': true,
-//     'phone': true,
-//     'home_city': true,
-//     'home_address': true
-//   };
-//   People.find({id: "af472139-e8bb-11e4-af42-0673d9c9b5d6"}, table_fields, function(err, peoples) {
-//     callback(err, peoples);
-//   });
-// };
 
 var getElvantoContacts = function (callback) {
   var table_fields = {
