@@ -21,36 +21,25 @@ module.exports = {
   },
 
   getFullNameStr: function (person) {
-    var fullNameStr = "FIRSTNAME LASTNAME".
-      replace(/FIRSTNAME/g, person.firstname).
-      replace(/LASTNAME/g, person.lastname);
-    return fullNameStr;
+    return person.firstname.concat(" ", person.lastname);
   },
 
   getAddressStr: function (person) {
-    var addressStr = "HOME_ADDRESS".
-      replace(/HOME_ADDRESS/g, person.home_address);
-    return addressStr;
+    return person.home_address;
   },
 
   // get all phone numbers
   getPhoneNumbers: function (person) {
-    var phones = [];
-    if (person.mobile !== "") phones.push(person.mobile);
-    if (person.phone !== "") phones.push(person.phone);
-    return phones;
+    return [person.mobile, person.phone];
   },
 
   // get any phone number
   getPhoneNumber: function (person) {
-    var phones = this.getPhoneNumbers(person)
-    return phones[0];
+    return this.getPhoneNumbers(person)[0];
   },
 
   getPhoneStr: function (person) {
-    var phone = this.getPhoneNumber(person)
-    var phoneStr = "# PHONE".replace(/PHONE/g, phone);
-    return phoneStr;
+    return  "# ".concat(this.getPhoneNumber(person));
   },
 
   getFamilyMemberStr: function(familyMember) {
@@ -85,25 +74,19 @@ module.exports = {
     db.collection('peoples').find({
       lastname: person.lastname,
       loc:{$geoWithin: { $centerSphere: [ [personLng, personLat] , this.FAMILY_RADIUS_RADIANS] } }
-    }).toArray(function(err, results){
-      callback(err, results);
-    });
+    }).toArray(callback);
   },
 
   findPeoplesByPostcode: function(postCode, callback) {
     var db = mongoose.connection;
     db.collection('peoples').find({'home_postcode': postCode}, this.tableFields).
-      toArray(function(err, results){
-        callback(err, results);
-      });
+      toArray(callback);
   },
 
   findPeoplesByCity: function(city, callback) {
     var db = mongoose.connection;
     db.collection('peoples').find({'home_city': city}, this.tableFields).
-      toArray(function(err, results){
-        callback(err, results);
-    });
+      toArray(callback);
   },
 
   findPeoplesByStreetAddress: function(streetAddress, callback) {
@@ -111,9 +94,7 @@ module.exports = {
     db.collection('peoples').find({
       'home_address': {'$regex': '.*'+streetAddress+'.*'}
     }, this.tableFields).
-      toArray(function(err, results){
-        callback(err, results);
-    });
+      toArray(callback);
   },
 
   findPeoplesByLoc: function(lng, lat, rad, callback) {
@@ -122,8 +103,6 @@ module.exports = {
     db.collection('peoples').find({
       loc:{$geoWithin: { $centerSphere: [ [lng, lat] , radius_radians] } }
     }, this.tableFields).
-      toArray(function(err, results){
-        callback(err, results);
-    });
+      toArray(callback);
   }
 }
