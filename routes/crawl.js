@@ -94,16 +94,23 @@ router.get('/', function (req, res) {
     json: true
   }, function (error, response, body) {
     if (!error) {
-      var to = setInterval(function () {
-        var person;
-        if (person = body.people.person.pop()) {
-          storeOne(person);
-        } else {
-          clearInterval(to);
-        }
-      }, 500);
 
-      var storeOne = function (person) {
+      var D = 1000;
+      var N = 10;
+
+      var peoples = body.people.person;
+      async.forEachLimit(peoples, N, function (person, callback) {
+        storeOne(person, function (err) {
+          setTimeout(function() {
+            callback(err);
+          }, D);
+        });
+      }, function (err) {
+        if (err) return res.send(err);
+        return res.send("Ok");
+      });
+
+      var storeOne = function (person, callback) {
         request.post({
           uri: 'https://api.elvanto.com/v1/people/getInfo.json',
           auth: {
@@ -165,6 +172,7 @@ router.get('/', function (req, res) {
               p._id = mongoose.Types.ObjectId(szObjectId);delete p.id;
               new People(p).save(function (err, instance) {
                 console.log(err, instance);
+                return callback(err);
               });
             } else {
               console.log("Empty data returned");
