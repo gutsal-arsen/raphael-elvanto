@@ -18,6 +18,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-usemin": "^3.1.1",
     "jade": "^1.11.0",
+    "lodash": "^4.11.2",
     "mongoose": "^4.4.6",
     "morgan": "^1.6.1",
     "node-geocoder": "^3.8.0",
