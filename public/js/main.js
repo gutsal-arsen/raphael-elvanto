@@ -8,7 +8,7 @@
 var handlers = {
   importElvanto: function (e) {
     $.ajax({
-      url: '/crawl',
+      url: '/crawl/elvanto_to_db',
       method: 'GET',
       beforeSend: function () {
         $(document.body).fadeOut('slow');

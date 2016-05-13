@@ -226,8 +226,22 @@ router.elvantoToDb = () => {
 		});
 	});
 };
+// *******************************************************************************
+// HTTP handlers
 
 router.get('/elvanto_to_db', (req, res) => {
+    console.log('Headers', req.headers);
+    router
+    	.elvantoToDb()
+    	.then((success) => {
+    	    res.send('OK ' + success);
+    	})
+    	.catch((err) => {
+    	    res.status(500).send(err);
+    	});
+});
+
+router.get('/db_to_google_contacts', (req, res) => {
     router
 	.elvantoToDb()
 	.then((success) => {
@@ -238,6 +252,8 @@ router.get('/elvanto_to_db', (req, res) => {
 	});
 });
 
+
+// *******************************************************************************
 /**
  Database initialization
  */
@@ -258,7 +274,6 @@ router.init = (dbPath) => {
 	    console.log('Connected to Elvanto');
 	}
     });
-
 };
 
 
