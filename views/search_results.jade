@@ -3,7 +3,7 @@ include templates/marker_bubble_template
 p Total #{peoples.length} results found
 section
   if peoples.length > 0
-    div#map
+div#maplay
     br
     table.search_results
       thead
@@ -32,4 +32,3 @@ section
       var lng = gMapPosArray[0];
       var lat = gMapPosArray[1];
       initMap(lng, lat, peopleMarkers);
-

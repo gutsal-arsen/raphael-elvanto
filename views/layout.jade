@@ -39,6 +39,8 @@ html(lang='en')
       script(src='js/ui.js')
       script(src='js/main.js')
 
+      include templates/list-group
+
 
   body
     #app.app.app-header-fixed(ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}", ui-view='')
@@ -106,7 +108,7 @@ html(lang='en')
                   //-       | 1.0 initial released
                   //-       br
                   //-       small.text-muted 1 hour ago
-                  //- .panel-footer.text-sm
+                   .panel-footer.text-sm
                     a.pull-right(href='')
                       i.fa.fa-cog
                     a(href='#notes', data-toggle='class:show animated fadeInRight') See all the notifications

@@ -24,23 +24,22 @@ ws.onopen = () => {
       var szText;
 
       switch(msg.action){
-      case 'started': szText = 'Elvanto to Database import has been started';break;
-      case 'progress': szText = 'Elvanto to DB progress: page:' + msg.page + ', total:' + msg.total;break;
-      case 'finished': szText = 'Elvanto to Database import has been finished';break;
+      case 'started':
+      case 'finished': {
+        var template = $('#list-group-text').html(),
+            sz = Mustache.render(template, {text: msg.action, small_text:'Just now'});
+        $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
+        var template = $('#list-group-progress').html(),
+            sz = Mustache.render(template, {percent: 0});
+        $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
+
+      };break;
+      case 'progress':
+        var template = $('#list-group-progress').html(),
+        sz = Mustache.render(template, {percent: parseInt(msg.page) * 100/msg.total*100});
+        $('#pb').remove();
+        $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
       }
-      var szHtml = [
-        "<a href='#' class='list-group-item'>",
-        "<span class='pull-left m-r thumb-sm'></span>", // <!-- could use image here
-        "<span class='clear block m-b-none'>",
-        szText,
-        "<br/>",
-        "<div class='small text-muted'>",
-        'Just now',
-        "</div>",
-        "</span>",
-        "</a>"
-      ].join('');
-      $('.dropdown .dropdown-menu .panel .list-group').append($(szHtml));
 
     };break;
 
