@@ -27,7 +27,7 @@ ws.onopen = () => {
       case 'started':
       case 'finished': {
         var template = $('#list-group-text').html(),
-            sz = Mustache.render(template, {text: msg.action, small_text:'Just now'});
+            sz = Mustache.render(template, {text: 'Elvanto to DB process has been ' + msg.action, small_text:'Just now'});
         $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
         if(msg.fn === 'started'){
           var template = $('#list-group-progress').html(),
