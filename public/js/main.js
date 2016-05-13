@@ -29,9 +29,13 @@ ws.onopen = () => {
         var template = $('#list-group-text').html(),
             sz = Mustache.render(template, {text: msg.action, small_text:'Just now'});
         $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
-        var template = $('#list-group-progress').html(),
-            sz = Mustache.render(template, {percent: 0});
-        $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
+        if(msg.fn === 'started'){
+          var template = $('#list-group-progress').html(),
+              sz = Mustache.render(template, {percent: 0});
+          $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
+        } else {
+          $('#pb').remove();
+        }
 
       };break;
       case 'progress':
