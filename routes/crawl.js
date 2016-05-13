@@ -20,6 +20,7 @@ var httpAdapter = 'https';
 var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, {apiKey: process.env.GOOGLE_SERVER_API_KEY});
 
 var router = express.Router();
+
 const PAGE_SIZE = 100;
 
 
@@ -205,7 +206,7 @@ router.transformObjects = (arr) => {
 };
 
 
-router.elvantoToDb = () => {
+router.elvantoToDb = (tickCb) => {
     var page = 0, total = 1; // starting from 1st page
 
     return promiseWhile(
@@ -223,34 +224,35 @@ router.elvantoToDb = () => {
 		.then((result) => router.transformObjects(result.people.person))
 		.then((results) => {
 		    router.db.update(results);
-		});
+		})
+		.then(() => tickCb(page, total));
 	});
 };
 // *******************************************************************************
 // HTTP handlers
 
-router.get('/elvanto_to_db', (req, res) => {
-    console.log('Headers', req.headers);
-    router
-    	.elvantoToDb()
-    	.then((success) => {
-    	    res.send('OK ' + success);
-    	})
-    	.catch((err) => {
-    	    res.status(500).send(err);
-    	});
-});
+// router.get('/elvanto_to_db', (req, res) => {
+//     console.log('Headers', req.headers);
+//     router
+//     	.elvantoToDb()
+//     	.then((success) => {
+//     	    res.send('OK ' + success);
+//     	})
+//     	.catch((err) => {
+//     	    res.status(500).send(err);
+//     	});
+// });
 
-router.get('/db_to_google_contacts', (req, res) => {
-    router
-	.elvantoToDb()
-	.then((success) => {
-	    res.send('OK ' + success);
-	})
-	.catch((err) => {
-	    res.status(500).send(err);
-	});
-});
+// router.ws('/db_to_google_contacts', (req, res) => {
+//     router
+// 	.elvantoToDb()
+// 	.then((success) => {
+// 	    res.send('OK ' + success);
+// 	})
+// 	.catch((err) => {
+// 	    res.status(500).send(err);
+// 	});
+// });
 
 
 // *******************************************************************************

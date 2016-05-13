@@ -44,6 +44,36 @@ app.use('/crawl', crawl);
 app.use('/search', search);
 app.use('/auth', auth);
 
+var expressWs = require('express-ws')(app);
+
+app.use(function (req, res, next) {
+  console.log('middleware');
+  req.testing = 'testing';
+  return next();
+});
+
+app.ws('/', (ws, req) => {
+  ws.on('message', (szMsg) => {
+    var  msg = JSON.parse(szMsg);
+    switch(msg.fn){
+    case 'elvanto_to_db': {
+      ws.send(JSON.stringify({fn: msg.fn, action: 'started' }))
+      crawl
+        .elvantoToDb((page, total) => {
+          ws.send(JSON.stringify({fn: msg.fn, action: 'progress', page: page, total: total}))
+        })
+        .then((success) => {
+          ws.send(JSON.stringify({fn: msg.fn, action: 'finished'}))
+        })
+        .catch((err) => {
+          res.status(500).send(err);
+        });
+    }
+    default: console.log(JSON.stringify(msg));
+    }
+  })
+});
+
 /// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found');

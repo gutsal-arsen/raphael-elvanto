@@ -5,21 +5,69 @@
 //     return null;
 // };
 
+// The WebSocket-Object (with resource + fallback)
+var ws = new WebSocket ('ws://' + window.location.host + '/');
+
+// WebSocket onerror event triggered also in fallback
+ws.onerror = (e) => {
+  console.log ('Error with WebSocket uid: ' + e.target.uid);
+};
+
+ws.onopen = () => {
+  console.log('WebSocket connection opened');
+  ws.onmessage = (ws, req) => {
+    console.log(ws.data);
+    var msg = JSON.parse(ws.data);
+
+    switch(msg.fn) {
+    case 'elvanto_to_db': {
+      var szText;
+
+      switch(msg.action){
+      case 'started': szText = 'Elvanto to Database import has been started';break;
+      case 'progress': szText = 'Elvanto to DB progress: page:' + msg.page + ', total:' + msg.total;break;
+      case 'finished': szText = 'Elvanto to Database import has been finished';break;
+      }
+      var szHtml = [
+        "<a href='#' class='list-group-item'>",
+        "<span class='pull-left m-r thumb-sm'></span>", // <!-- could use image here
+        "<span class='clear block m-b-none'>",
+        szText,
+        "<br/>",
+        "<div class='small text-muted'>",
+        'Just now',
+        "</div>",
+        "</span>",
+        "</a>"
+      ].join('');
+      $('.dropdown .dropdown-menu .panel .list-group').append($(szHtml));
+
+    };break;
+
+    }
+  }
+
+};
+
 var handlers = {
   importElvanto: function (e) {
-    $.ajax({
-      url: '/crawl/elvanto_to_db',
-      method: 'GET',
-      beforeSend: function () {
-        $(document.body).fadeOut('slow');
-      },
-      complete: function () {
-        $(document.body).fadeIn('slow');
-      },
-      success: function (response, status) {
-        console.log(status, response);
-      }
-    });
+    // $.ajax({
+    //   url: '/crawl/elvanto_to_db',
+    //   method: 'GET',
+    //   beforeSend: function () {
+    //     $(document.body).fadeOut('slow');
+    //   },
+    //   complete: function () {
+    //     $(document.body).fadeIn('slow');
+    //   },
+    //   success: function (response, status) {
+    //     console.log(status, response);
+    //   }
+    // });
+
+    ws.send(JSON.stringify({fn: 'elvanto_to_db'}), (ret) => {
+      console.log('Returned:' + ret);
+    })
   },
 
   importExcel: function (e) {
