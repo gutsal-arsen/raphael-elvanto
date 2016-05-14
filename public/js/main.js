@@ -5,70 +5,9 @@
 //     return null;
 // };
 
-// The WebSocket-Object (with resource + fallback)
-var ws = new WebSocket ('ws://' + window.location.host + '/');
-
-// WebSocket onerror event triggered also in fallback
-ws.onerror = (e) => {
-  console.log ('Error with WebSocket uid: ' + e.target.uid);
-};
-
-ws.onopen = () => {
-  console.log('WebSocket connection opened');
-  ws.onmessage = (ws, req) => {
-    console.log(ws.data);
-    var msg = JSON.parse(ws.data);
-
-    switch(msg.fn) {
-    case 'elvanto_to_db': {
-      var szText;
-
-      switch(msg.action){
-      case 'started':
-      case 'finished': {
-        var template = $('#list-group-text').html(),
-            sz = Mustache.render(template, {text: 'Elvanto to DB process has been ' + msg.action, small_text:'Just now'});
-        $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
-        if(msg.fn === 'started'){
-          var template = $('#list-group-progress').html(),
-              sz = Mustache.render(template, {percent: 0});
-          $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
-        } else {
-          $('#pb').remove();
-        }
-
-      };break;
-      case 'progress':
-        var template = $('#list-group-progress').html(),
-        sz = Mustache.render(template, {percent: parseInt(msg.page) * 100/msg.total*100});
-        $('#pb').remove();
-        $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
-      }
-
-    };break;
-
-    }
-  }
-
-};
-
 var handlers = {
   importElvanto: function (e) {
-    // $.ajax({
-    //   url: '/crawl/elvanto_to_db',
-    //   method: 'GET',
-    //   beforeSend: function () {
-    //     $(document.body).fadeOut('slow');
-    //   },
-    //   complete: function () {
-    //     $(document.body).fadeIn('slow');
-    //   },
-    //   success: function (response, status) {
-    //     console.log(status, response);
-    //   }
-    // });
-
-    ws.send(JSON.stringify({fn: 'elvanto_to_db'}), (ret) => {
+    serverWS.send(JSON.stringify({fn: 'elvanto_to_db'}), (ret) => {
       console.log('Returned:' + ret);
     })
   },
