@@ -34,8 +34,8 @@ serverWS.onopen = () => {
       };break;
       case 'progress':
       progressWidget.update({
-        text: 'Updating records',
-        progress: parseInt(msg.page) * PAGE_SIZE/msg.total*100,
+        text: 'Updating records(' + msg.page + ')',
+        progress: parseInt(msg.page) * msg.page_size/msg.total*100,
       });
 
       }

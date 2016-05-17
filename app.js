@@ -16,6 +16,8 @@ var crawl = require('./routes/crawl');
 var search = require('./routes/search');
 var auth = require('./routes/auth');
 
+var _ = require('lodash');
+
 var app = express();
 
 crawl.init("mongodb://localhost/elvanto");
@@ -59,8 +61,8 @@ app.ws('/', (ws, req) => {
     case 'elvanto_to_db': {
       ws.send(JSON.stringify({fn: msg.fn, action: 'started' }))
       crawl
-        .elvantoToDb((page, total) => {
-          ws.send(JSON.stringify({fn: msg.fn, action: 'progress', page: page, total: total}))
+        .elvantoToDb((opts) => {
+          ws.send(JSON.stringify(_.extend(opts, {fn: msg.fn, action: 'progress'})));
         })
         .then((success) => {
           ws.send(JSON.stringify({fn: msg.fn, action: 'finished'}))

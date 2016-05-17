@@ -237,7 +237,7 @@ router.elvantoToDb = (tickCb) => {
 		    .then((results) => {
 		      router.db.update(results);
 		    })
-		    .then(() => tickCb(page, total));
+		    .then(() => tickCb({page: page, page_size: PAGE_SIZE, total:total}));
 	  });
 };
 // Google Contacts ************************************************************************

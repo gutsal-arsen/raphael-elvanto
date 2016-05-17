@@ -51,7 +51,7 @@ class ProgressWidget extends Widget{
     o.progress && $('.progress-bar', this.el).css('width', o.progress).data('original-title', o.title);
   }
 
-  update(o){
+  done(o){
     o.text && $('span.clear.block.m-b-none > span', this.el).text(o.text);
     $('.progress-bar', this.el).remove();
   }
