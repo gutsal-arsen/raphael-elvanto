@@ -1,9 +1,35 @@
+script#list-group(type='text/html')
+  .panel.bg-white
+    .panel-heading.b-light.bg-light
+      strong
+        | You have 2 notifications
+    .list-group
+    //-   a.list-group-item(href='')
+    //-     span.pull-left.m-r.thumb-sm
+    //-       //img.img-circle(src='img/user.jpg', alt='...')
+    //-     span.clear.block.m-b-none
+    //-       | Use awesome animate.css
+    //-       br
+    //-       small.text-muted 10 minutes ago
+    //-   a.list-group-item(href='')
+    //-     span.clear.block.m-b-none
+    //-       | 1.0 initial released
+    //-       br
+    //-       small.text-muted 1 hour ago
+     .panel-footer.text-sm
+      a.pull-right(href='')
+        i.fa.fa-cog
+      a(href='#notes', data-toggle='class:show animated fadeInRight') See all the notifications
+  // / dropdown
+
 script#list-group-text(type='text/html')
     <a class="list-group-item" href="#">
     <span class="pull-left m-r thumb-sm">
     </span>
     <span class="clear block m-b-none">
+    <span>
     | {{ text }}
+    </span>
     <br/>
     <div class="small text-muted">
     | {{ small_text }}
@@ -17,8 +43,14 @@ script#list-group-progress(type='text/html')
     <span class="pull-left m-r thumb-sm">
     </span>
     <span class="clear block m-b-none">
-    <div class="progress progress-sm progress-striped active m-t-xs m-b-none">
-    <div class="progress-bar bg-success" data-toggle="tooltip" data-original-title="{{percent}}" style="width: {{percent}}%"></div>
+    <span>
+    | {{ text }}
     </span>
+    <br/>
+    <div class="small text-muted">
+    | {{ small_text }}
+    </div>
+    <div class="progress progress-sm progress-striped active m-t-xs m-b-none">
+    <div class="progress-bar bg-success" data-toggle="tooltip" data-original-title="{{ progress }}" style="width: {{ progress }}%"></div>
     </div>
     </a>
