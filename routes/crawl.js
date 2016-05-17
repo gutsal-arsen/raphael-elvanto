@@ -267,7 +267,7 @@ router.dbToContacts = (accessToken, tickCb) => {
 	              console.log(err);
               } else {
                 xml2js.parseString(contact, (err, obj) => {
-                  var googleId = obj['entry']['id'][0];
+                  var googleId = obj['entry']?obj['entry']['id'][0]:'';
 
                   console.log('Looking for:' + person._id.toString());
 		              People
