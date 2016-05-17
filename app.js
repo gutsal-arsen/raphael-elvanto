@@ -70,6 +70,19 @@ app.ws('/', (ws, req) => {
         .catch((err) => {
           res.status(500).send(err);
         });
+    };break;
+    case 'db_to_google': {
+      ws.send(JSON.stringify({fn: msg.fn, action: 'started' }))
+      crawl
+        .dbToContacts(msg.accessToken, (opts) => {
+          ws.send(JSON.stringify(_.extend(opts, {fn: msg.fn, action: 'progress'})));
+        })
+        .then((success) => {
+          ws.send(JSON.stringify({fn: msg.fn, action: 'finished'}))
+        })
+        .catch((err) => {
+          res.status(500).send(err);
+        });
     }
     default: console.log(JSON.stringify(msg));
     }
