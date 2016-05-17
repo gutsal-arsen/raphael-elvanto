@@ -8,7 +8,8 @@ module.exports = {
   FAMILY_RADIUS_RADIANS: FAMILY_RADIUS_MILES / EARTH_RADIUS,
 
   People: global.People = global.People || mongoose.model('people', mongoose.Schema({
-    id: 'string',
+    elvantoId: 'string',
+    googleId: 'string',
     date_added: 'string',
     date_modified: 'string',
     category_id: 'string',
