@@ -242,6 +242,7 @@ router.elvantoToDb = (tickCb) => {
 };
 // Google Contacts ************************************************************************
 router.dbToContacts = (accessToken, tickCb) => {
+  var num = 0;
   return router.db
     .getAll()
     .then((results) => {
