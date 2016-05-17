@@ -1,23 +1,27 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}!
+  .app-content-body
+    .bg-light.lter.b-b.wrapper-md
+      h1.m-n.font-thin.h3 Import/Export routines
 
-  section
-    p Import Elvanto
+    .wrapped-md
+      .row
+        .col-sm-6
+          .panel.panel-default
+            .panel-heading.font-bold
+              | Import Elvanto
+            .panel-body
+              button.btn.btn-success(data-click="importElvanto" title="Import Elvanto") Import
 
-    button(data-click="importElvanto" title="Import Elvanto").
-      Import Elvanto
+        section.none
+          p Import Excel
 
-  section().progress
-    p Import Excel
+          input(data-click="importExcel" type="file" name="inputFile" multiple="true")
 
-    input(data-click="importExcel" type="file" name="inputFile" multiple="true")
-
-  section
-    p Elvanto to Google Contacts
-
-    button(data-click="exportGoogleContacts" title="Export local peoples to Google Contacts").
-      Export to Google Contacts
-
+        .col-sm-6
+          .panel.panel-default
+            .panel-heading.font-bold
+              | Database to Google Contacts
+            .panel-body
+              button.btn.btn-success(data-click="exportGoogleContacts" title="Export local peoples to Google Contacts") Export

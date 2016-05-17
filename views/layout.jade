@@ -43,7 +43,7 @@ html(lang='en')
       include templates/list-group
 
 
-  body
+  body.no-skin-config
     #app.app.app-header-fixed(ng-class="{'app-header-fixed':app.settings.headerFixed, 'app-aside-fixed':app.settings.asideFixed, 'app-aside-folded':app.settings.asideFolded, 'app-aside-dock':app.settings.asideDock, 'container':app.settings.container}", ui-view='')
       .app-header.navbar
         .navbar-header.bg-black
@@ -188,11 +188,6 @@ html(lang='en')
                   a.auto(href='/')
                     i.glyphicon.glyphicon-resize-full
                     span.font-bold Import/Export
-                  //- ul.nav.nav-second-level.collapse
-                  //-   li
-                  //-     a(href='/') Import from Elvanto
-                  //-   li
-                  //-     a(href='/') Sync to Google Contacts
 
       .app-content.ng-scope
         .butterbar.hide(ui-butterbar='')
