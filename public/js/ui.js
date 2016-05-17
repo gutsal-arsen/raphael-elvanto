@@ -46,9 +46,14 @@ class ProgressWidget extends Widget{
   // Update widget state
   // @param [options] options
   update(o){
-    o.progress = o.progress || this.total?(o.current / this.total) * 100:0;
+    o.progress = o.progress?o.progress:this.total?(o.current / this.total) * 100:0;
     o.text && $('span.clear.block.m-b-none > span', this.el).text(o.text);
     o.progress && $('.progress-bar', this.el).css('width', o.progress).data('original-title', o.title);
+  }
+
+  update(o){
+    o.text && $('span.clear.block.m-b-none > span', this.el).text(o.text);
+    $('.progress-bar', this.el).remove();
   }
 
   remove(){

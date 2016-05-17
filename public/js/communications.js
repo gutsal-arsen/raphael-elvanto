@@ -1,5 +1,11 @@
 // The WebSocket-Object (with resource + fallback)
 var serverWS = new WebSocket ('ws://' + window.location.host + '/');
+var NotificationContiner;
+
+$(document).ready(function (e) {
+  NotificationContiner = new WidgetContainer('#list-group', '.dropdown-menu.w-xl.animated.fadeInUp');
+})
+
 
 // WebSocket onerror event triggered also in fallback
 serverWS.onerror = (e) => {
@@ -7,35 +13,31 @@ serverWS.onerror = (e) => {
 };
 
 serverWS.onopen = () => {
+  var progressWidget;
   console.log('WebSocket connection opened');
-  serverWS.onmessage = (ws, req) => {
-    console.log(serverWS.data);
-    var msg = JSON.parse(serverWS.data);
 
+  serverWS.onmessage = (message) => {
+    var msg = JSON.parse(message.data);
     switch(msg.fn) {
     case 'elvanto_to_db': {
-      var szText;
-
       switch(msg.action){
-      case 'started':
+      case 'started':{
+        progressWidget = new ProgressWidget('#list-group-progress',
+                                   '.dropdown .dropdown-menu .panel .list-group',
+                                   {text: 'Import process started', small_text: 'at: ' + new Date(), progress: 0});
+        NotificationContiner.add(progressWidget);
+      };break;
       case 'finished': {
-        var template = $('#list-group-text').html(),
-            sz = Mustache.render(template, {text: 'Elvanto to DB process has been ' + msg.action, small_text:'Just now'});
-        $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
-        if(msg.fn === 'started'){
-          var template = $('#list-group-progress').html(),
-              sz = Mustache.render(template, {percent: 0});
-          $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
-        } else {
-          $('#pb').remove();
-        }
-
+        progressWidget.done({
+          text: 'Update completed',
+        });
       };break;
       case 'progress':
-        var template = $('#list-group-progress').html(),
-        sz = Mustache.render(template, {percent: parseInt(msg.page) * 100/msg.total*100});
-        $('#pb').remove();
-        $('.dropdown .dropdown-menu .panel .list-group').append($(sz));
+      progressWidget.update({
+        text: 'Updating records',
+        progress: parseInt(msg.page) * PAGE_SIZE/msg.total*100,
+      });
+
       }
 
     };break;
