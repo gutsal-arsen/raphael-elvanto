@@ -1,27 +1,18 @@
 extends layout
 
 block content
-  .app-content-body
-    .bg-light.lter.b-b.wrapper-md
-      h1.m-n.font-thin.h3 Import/Export routines
+  .wrapped-md
+    .row
+      .col-sm-6
+        .panel.panel-default
+          .panel-heading.font-bold
+            | Import Elvanto
+          .panel-body
+            button.btn.btn-success(data-click="importElvanto" title="Import Elvanto") Import
 
-    .wrapped-md
-      .row
-        .col-sm-6
-          .panel.panel-default
-            .panel-heading.font-bold
-              | Import Elvanto
-            .panel-body
-              button.btn.btn-success(data-click="importElvanto" title="Import Elvanto") Import
-
-        section.none
-          p Import Excel
-
-          input(data-click="importExcel" type="file" name="inputFile" multiple="true")
-
-        .col-sm-6
-          .panel.panel-default
-            .panel-heading.font-bold
-              | Database to Google Contacts
-            .panel-body
-              button.btn.btn-success(data-click="exportGoogleContacts" title="Export local peoples to Google Contacts") Export
+      .col-sm-6
+        .panel.panel-default
+          .panel-heading.font-bold
+            | Database to Google Contacts
+          .panel-body
+            button.btn.btn-success(data-click="exportGoogleContacts" title="Export local peoples to Google Contacts") Export

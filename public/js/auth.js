@@ -30,21 +30,12 @@ function processCallback(params) {
 }
 
 function handleOAuthConnection(oauthCode, oauthTokens) {
-  $('body').html('oauthCode = ' + oauthCode + '<br/>oauthTokens = ' + oauthTokens +
-                 'Elvanto to Google Contacts export started. Please wait..');
-  $.ajax({
-    url: '/crawl/db_to_google',
-    method: 'POST',
-    data: {
-      oauth_code: oauthCode,
-      oauth_tokens: oauthTokens
-    },
-    complete: function (response) {
-    },
-    success: function (response, status) {
-      $('body').html(response);
-      alert('Export finished');
-      window.location = '/'
-    }
-  });
+   // $('body').html('oauthCode = ' + oauthCode + '<br/>oauthTokens = ' + oauthTokens +
+   //                'Elvanto to Google Contacts export started. Please wait..');
+
+  window.history.back();
+
+  serverWS.send(JSON.stringify({fn: 'db_to_google', accessToken: oauthTokens.access_token}), (ret) => {
+    console.log('Returned:' + ret);
+  })
 }

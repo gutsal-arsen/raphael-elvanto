@@ -68,12 +68,12 @@ class ProgressWidget extends Widget{
     update(o){
 	o.progress = o.progress?o.progress:this.total?(o.current / this.total) * 100:0;
 	o.text && $('span.clear.block.m-b-none > span', this.el).text(o.text);
-	o.progress && $('.progress-bar', this.el).css('width', o.progress).data('original-title', o.title);
+	o.progress && $('.progress-bar', this.el).css('width', o.progress/100 * $('.progress-bar', this.el).parent().width())
     }
 
     done(o){
 	o.text && $('span.clear.block.m-b-none > span', this.el).text(o.text);
-	$('.progress-bar', this.el).remove();
+	$('.progress', this.el).remove();
     }
 
     remove(){

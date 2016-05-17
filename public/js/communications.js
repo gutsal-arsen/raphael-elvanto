@@ -1,11 +1,5 @@
 // The WebSocket-Object (with resource + fallback)
 var serverWS = new WebSocket ('ws://' + window.location.host + '/');
-var NotificationContiner;
-
-$(document).ready(function (e) {
-  notificationContiner = new NotificationContainer();
-})
-
 
 // WebSocket onerror event triggered also in fallback
 serverWS.onerror = (e) => {
@@ -29,7 +23,7 @@ serverWS.onopen = () => {
       };break;
       case 'finished': {
         progressWidget.done({
-          text: 'Update completed',
+          text: 'DB Update completed',
         });
       };break;
       case 'progress':
@@ -39,6 +33,27 @@ serverWS.onopen = () => {
         });
       }
     };break;
+    case 'db_to_google': {
+      switch(msg.action){
+      case 'started':{
+        progressWidget = new ProgressWidget('#list-group-progress',
+                                            '.dropdown .dropdown-menu .panel .list-group',
+                                            {text: 'Export process started', small_text: 'at: ' + new Date(), progress: 0});
+        notificationContiner.add.call(notificationContiner, progressWidget);
+      };break;
+      case 'finished': {
+        progressWidget.done({
+          text: 'Google Contacts update completed',
+        });
+      };break;
+      case 'progress':
+        progressWidget.update({
+          text: 'Updating contact (' + msg.page + ')',
+          progress: parseInt(msg.page) * msg.page_size/msg.total*100,
+        });
+      }
+    };break;
+
     }
   }
 };

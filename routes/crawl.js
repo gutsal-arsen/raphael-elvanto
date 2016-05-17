@@ -241,25 +241,19 @@ router.elvantoToDb = (tickCb) => {
 	  });
 };
 // Google Contacts ************************************************************************
-router.post('/db_to_google', function (req, res) {
-  var attrHash = req.body;
-  var oauthCode = attrHash['oauth_code'],
-	    oauthTokens = attrHash['oauth_tokens'];
-
-  var accessToken = oauthTokens.access_token;
-  var num = 0;
-  router.db
+router.dbToContacts = (accessToken, tickCb) => {
+  return router.db
     .getAll()
     .then((results) => {
       return new Promise((res, rej) => {
-        console.log(results.length);
+        var total = results.length;
 
         async.forEachOfLimit(results, 5, (person, idx, cb) => {
 	        var xmlString = router.google.createContactEntry(person, 'XXX');
 
           if(person.googleId){
 	          router.google.updateContact(person.googleId, xmlString, accessToken, (err, contact) =>{
-              console.log('Updated: ' + contact._id);
+              console.log('Updated: ' + contact);
               if(err){
 	              console.log(err);
               }
@@ -279,8 +273,9 @@ router.post('/db_to_google', function (req, res) {
 		                .findOneAndUpdate({_id:person._id.toString()}, {googleId: googleId}, {upsert:false})
 		                .then((p) => {
 			                cb();
+                      tickCb({ progress: num, total: total});
 		                })
-                    .catch((err) => console.log('Problem:' + err));
+                    .catch((err) => console.log('oh no:' + err));
                 });
               }
 	          })
@@ -291,9 +286,11 @@ router.post('/db_to_google', function (req, res) {
         })
       })
     })
-    .then(() => {
+    .catch((err) => {
+      console.log('oh no,' + err);
     });
-});
+
+}
 
 router.createGoogleContactGroup = function(groupName, accessToken, callback) {
     // TODO: please, make a group <groupName> manually for now!
@@ -330,7 +327,7 @@ router.google.createContactEntry = function(contact, groupHref) {
 	    }]},
                    {"atom:content": [{_attr: {type:'text'}},
                                      notesStr]},
-                   {"id": contact._id},
+                   {"id": contact.googleId},
                    contact.email ? {"gd:email": [{ _attr: { label: 'Personal', address: contact.email }}]} : {},
                    contact.phone ? {"gd:phoneNumber": [{ _attr: {rel: "http://schemas.google.com/g/2005#home"}}, contact.phone]} : {},
                    contact.mobile ? {"gd:phoneNumber": [{ _attr: {rel: "http://schemas.google.com/g/2005#mobile"}}, contact.mobile]} : {},
@@ -376,14 +373,14 @@ router.google.createContact = (xmlContact, accessToken, callback) => {
 }
 
 router.google.updateContact = (id, xmlContact, accessToken, callback) => {
-  console.log('Updating:' + id);
-  console.log(xmlContact);
+  var cid = id.substring(id.lastIndexOf('/'));
   request.put({
-	  uri: 'https://www.google.com/m8/feeds/contacts/userEmail/full/' + unescape(id),
+	  uri: id.replace('/base/', '/full/').replace(/^http/, 'https'),
 	  headers: {
 	    'Authorization': 'Bearer ' + accessToken,
 	    'GData-Version': '3.0',
-	    'Content-Type': 'application/atom+xml'
+	    'Content-Type': 'application/atom+xml',
+      'If-Match': '*'
 	  },
 	  body: xmlContact
   }, function (error, response, body) {

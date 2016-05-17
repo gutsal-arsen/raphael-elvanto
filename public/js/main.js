@@ -5,6 +5,13 @@
 //     return null;
 // };
 
+
+var NotificationContiner;
+
+$(document).ready(function (e) {
+  notificationContiner = new NotificationContainer();
+})
+
 var handlers = {
   importElvanto: function (e) {
     serverWS.send(JSON.stringify({fn: 'elvanto_to_db'}), (ret) => {
@@ -14,6 +21,30 @@ var handlers = {
 
   importExcel: function (e) {
     $('input[type=file]').click();
+  },
+
+  test: function (e) {
+    var progressWidget = new ProgressWidget('#list-group-progress',
+                                        '.dropdown .dropdown-menu .panel .list-group',
+                                        {text: 'Import process started', small_text: 'at: ' + new Date(), progress: 0});
+    notificationContiner.add.call(notificationContiner, progressWidget);
+
+    var n = 0
+    , i = setInterval(function (e) {
+      if(n == 30){
+        progressWidget.done.call(progressWidget, {
+          text: 'Finished'
+        });
+
+        clearInterval(i);
+        return;
+      }
+      progressWidget.update.call(progressWidget, {
+        text: 'Updating records(' + n++ + ')',
+        progress: parseInt(n)*1/30*100
+      });
+    }, 500)
+
   },
 
   exportGoogleContacts: function (e) {

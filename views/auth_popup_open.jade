@@ -2,7 +2,10 @@ extends layout
 
 block js
   script(src='components/jquery/dist/jquery.min.js')
+  script(src='/js/communications.js')
   script(src='/js/auth.js')
+
+  include templates/list-group
 
 block content
 
@@ -21,4 +24,5 @@ block content
       var authUrl = '!{authUrl}';
       var winParams = !{JSON.stringify(winParams)};
       openModal(authUrl, winParams);
+      console.log('Opened');
     });
