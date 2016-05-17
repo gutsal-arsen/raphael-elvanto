@@ -3,7 +3,7 @@ var serverWS = new WebSocket ('ws://' + window.location.host + '/');
 var NotificationContiner;
 
 $(document).ready(function (e) {
-  NotificationContiner = new WidgetContainer('#list-group', '.dropdown-menu.w-xl.animated.fadeInUp');
+  notificationContiner = new NotificationContainer();
 })
 
 
@@ -23,9 +23,9 @@ serverWS.onopen = () => {
       switch(msg.action){
       case 'started':{
         progressWidget = new ProgressWidget('#list-group-progress',
-                                   '.dropdown .dropdown-menu .panel .list-group',
-                                   {text: 'Import process started', small_text: 'at: ' + new Date(), progress: 0});
-        NotificationContiner.add(progressWidget);
+                                            '.dropdown .dropdown-menu .panel .list-group',
+                                            {text: 'Import process started', small_text: 'at: ' + new Date(), progress: 0});
+        notificationContiner.add.call(notificationContiner, progressWidget);
       };break;
       case 'finished': {
         progressWidget.done({
@@ -33,16 +33,12 @@ serverWS.onopen = () => {
         });
       };break;
       case 'progress':
-      progressWidget.update({
-        text: 'Updating records(' + msg.page + ')',
-        progress: parseInt(msg.page) * msg.page_size/msg.total*100,
-      });
-
+        progressWidget.update({
+          text: 'Updating records(' + msg.page + ')',
+          progress: parseInt(msg.page) * msg.page_size/msg.total*100,
+        });
       }
-
     };break;
-
     }
   }
-
 };
