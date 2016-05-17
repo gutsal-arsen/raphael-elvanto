@@ -300,28 +300,6 @@ router.createGoogleContactGroup = function(groupName, accessToken, callback) {
   callback(null, groupHref);
 };
 
-
-// router.getAllGoogleContacts = (accessToken, callback) => {
-//   request.get({
-// 	  uri: 'https://www.google.com/m8/feeds/contacts/default/full/?max-results=10', //FIXME trying to get all contacts at once
-// 	  headers: {
-// 	    'Authorization': 'Bearer ' + accessToken,
-// 	    'GData-Version': '3.0',
-// 	    'Content-Type': 'application/atom+xml',
-// 	  }
-//   }, function (error, response, body) {
-//     if(response){
-//       if(response.statusCode > 300){
-// 	      console.log(error,  response.statusCode, body);
-//       }
-//     } else {
-//       console.log(error, response, body);
-//     }
-// 	  xml2js.parseString(body, (err, result) => {
-//       callback(result);
-//     });
-//   });
-// }
 router.google = router.google || {};
 
 router.google.createContactEntry = function(contact, groupHref) {
