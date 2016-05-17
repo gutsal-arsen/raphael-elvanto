@@ -1,4 +1,4 @@
-+function ($) {
+(function ($) {
 
   $(function(){
 
@@ -6,7 +6,7 @@
         e.preventDefault();
         var $this = $(e.target);
         $this.attr('ui-toggle-class') || ($this = $this.closest('[ui-toggle-class]'));
-        
+
 		var classes = $this.attr('ui-toggle-class').split(','),
 			targets = ($this.attr('target') && $this.attr('target').split(',')) || Array($this),
 			key = 0;
@@ -19,4 +19,4 @@
 
       });
   });
-}(jQuery);
+})(jQuery);
