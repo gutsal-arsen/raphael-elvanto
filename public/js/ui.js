@@ -81,7 +81,31 @@ class ProgressWidget extends Widget{
     }
 }
 
-$(document).ready(() => {
+$.fn.dataTree = function (data) {
+    _.each(this, function (it) {
+	var tmpl = $('#profile').html();
 
+	var primaries = _.map(data, function(it) {
+	    var primary = _.filter(it.family.family_member, _.matches({relationship: 'Primary Contact'}));
+	    return _.isEmpty(primary)?null:{id: primary[0].id};
+	});
+
+	primaries = _.uniqBy(_.without(primaries, null), 'id');
+
+
+	_.each(primaries, (p) => {
+	    var o = _.find(data, _.matches({elvantoId: p.id}))
+	    , el = $(Mustache.render(tmpl, o?o:{}));
+
+	    $(el).on('click', function (e) {
+		$('.list-group.no-radius', this).toggleClass('none');
+	    });
+	    $(it).append(el);
+	});
+    });
+};
+
+
+$(document).ready(() => {
     $('#side-menu').metisMenu();
 });

@@ -15,6 +15,7 @@ var users = require('./routes/user');
 var crawl = require('./routes/crawl');
 var search = require('./routes/search');
 var auth = require('./routes/auth');
+var api = require('./routes/api');
 
 var _ = require('lodash');
 
@@ -39,12 +40,14 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/allPeople.json')));
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/crawl', crawl);
 app.use('/search', search);
 app.use('/auth', auth);
+app.use('/api', api);
 
 var expressWs = require('express-ws')(app);
 

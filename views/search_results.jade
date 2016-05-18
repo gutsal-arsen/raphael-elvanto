@@ -3,32 +3,11 @@ include templates/marker_bubble_template
 p Total #{peoples.length} results found
 section
   if peoples.length > 0
-div#maplay
-    br
-    table.search_results
-      thead
-        tr
-          td first name
-          td last name
-          td gender
-          td city
-          td address
-          td ZIP code
-      tbody
-      for user in peoples
-        tr
-          td= user.firstname
-          td= user.lastname
-          td= user.gender
-          td= user.home_city
-          td= user.home_address
-          td= user.home_postcode
 
+  script var peopleMarkers = !{JSON.stringify(peopleMarkers)}
 
-    script var peopleMarkers = !{JSON.stringify(peopleMarkers)}
-
-    script(type='text/javascript').
-      var gMapPosArray = '#{gMapPos}'.split(",");
-      var lng = gMapPosArray[0];
-      var lat = gMapPosArray[1];
-      initMap(lng, lat, peopleMarkers);
+  script(type='text/javascript').
+    var gMapPosArray = '#{gMapPos}'.split(",");
+    var lng = gMapPosArray[0];
+    var lat = gMapPosArray[1];
+    initMap(lng, lat, peopleMarkers);

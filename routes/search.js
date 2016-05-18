@@ -9,12 +9,12 @@ var calculateGMapPosition = function(peoples) {
   // google map center position - first matched user from array, if any :
   if (peoples.length > 0) {
     var centerLng = peoples.reduce(function(sum, person) {
-      var personLng = person.loc[0];
+      var personLng = Peoples.getLng(person);
       return (sum + personLng);
     }, 0)/peoples.length;
 
     var centerLat = peoples.reduce(function(sum, person) {
-        var personLat = person.loc[1];
+      var personLat = Peoples.getLat(person);
         return (sum + personLat);
       }, 0)/peoples.length;
     return [centerLng, centerLat];
@@ -33,8 +33,8 @@ var getPeoplesMarkers = function(peoples, callback) {
       if (err) return peoplesCb(err);
       var marker = {
         markerTitle: getMarkerName(person),
-        lng: person.loc[0],
-        lat: person.loc[1],
+        lng: Peoples.getLng(person),
+        lat: Peoples.getLat(person),
         address: Peoples.getAddressStr(person),
         phone: Peoples.getPhoneStr(person),
         fullName: Peoples.getFullNameStr(person),
@@ -83,12 +83,14 @@ router.post('/', function (req, res) {
   switch (search_type) {
     case 'zip':
       Peoples.findPeoplesByPostcode(search_term, function (err, peoples) {
-        respondWithSearchResults(res, err, peoples, null);
+        //respondWithSearchResults(res, err, peoples, null);
+        res.json(peoples);
       });
       break;
     case 'city':
       Peoples.findPeoplesByCity(search_term, function (err, peoples) {
-        respondWithSearchResults(res, err, peoples, null);
+        //respondWithSearchResults(res, err, peoples, null);
+        res.json(peoples);
       });
       break;
     case 'street':

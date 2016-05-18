@@ -1,0 +1,22 @@
+script#profile(type='text/html')
+  .panel.panel-default
+      .panel-heading
+          .clearfix
+            .h3.m-t-xs.m-b-xs
+                | {{home_address}} {{home_address2}}, {{home_city}}
+            a.pull-left.thumb-md.avatar.b-3x.m-r(href='#')
+              img(src="{{picture}}", alt="...")
+            .clear
+              .a(name="{{elvantoId}}")
+                a(href='#')
+                 .h4.m-t-xs.m-b-xs
+                  | {{lastname}}, {{firstname}}
+                i.fa.fa-circle.text-success.pull-right.text-xs.m-t-sm
+              small.text-muted {{home_address}} {{home_address2}}, {{home_city}}, {{home_state}} {{home_postcode}}
+              .list-group.no-radius.alt.none
+                {{#family.family_member}}
+                a.list-group-item(href='#')
+                  //span.badge.bg-success 25
+                  i.fa.fa-comment.fa-fw.text-muted
+                  | {{lastname}}, {{firstname}}
+                {{/family.family_member}}

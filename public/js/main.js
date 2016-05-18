@@ -4,11 +4,8 @@
 //     }
 //     return null;
 // };
-
-
-var NotificationContiner;
-
-$(document).ready(function (e) {
+var notificationContainer;
+$(document).ready(function (arg) {
   notificationContiner = new NotificationContainer();
 })
 
@@ -67,7 +64,8 @@ var handlers = {
         //$('.search_result').fadeIn('slow');
       },
       success: function (response, status) {
-        $('.search_result').html(response);
+        //$('.search_result').html(response);
+        $('.search_result *[type="dataTree"]').dataTree(response);
         // FIX: google map isn't displayed correctly if has been constructed upon hidden state
         //$('.search_result').hide();
         console.log(status, response);

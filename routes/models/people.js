@@ -72,10 +72,13 @@ module.exports = {
     'gender': true,
     'home_city': true,
     'home_address': true,
+    'home_postcode': true,
+    'picture': true,
+    'elvantoId': true,
     'phone': true,
     'mobile': true,
     'loc': true,
-    'home_postcode': true
+    'family': true
   },
 
   getFullNameStr: function (person) {
@@ -113,11 +116,11 @@ module.exports = {
   },
 
   getLng: function (person) {
-    return person.loc[0];
+    return person.loc?person.loc[0]:0;
   },
 
   getLat: function (person) {
-    return person.loc[1];
+    return person.loc?person.loc[1]:0;
   },
 
   /*

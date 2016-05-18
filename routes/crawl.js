@@ -186,6 +186,7 @@ router.transformObjects = (arr) => {
 	    var szObjectId = crypto.createHmac('sha1','').update(it.id).digest("hex"); // getting 40 chars string
 	    szObjectId = szObjectId.substring(16); // truncating first 16 chars to get 24 hex string
 	    it._id = szObjectId;
+      it.elvantoId = it.id;
 	    delete it.id;
 
 	    it.home_country = it.home_country || 'United States';

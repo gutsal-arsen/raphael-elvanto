@@ -22,6 +22,7 @@ html(lang='en')
       if ENV_DEVELOPMENT
         script(src='http://localhost:35729/livereload.js')
 
+      script(src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.12.0/lodash.min.js')
       script(src='components/jquery/dist/jquery.min.js')
       script(src='components/mustache.js/mustache.min.js')
       script(src='js/bootstrap.min.js')
@@ -199,7 +200,7 @@ html(lang='en')
                 .row
                   .col-sm-6.col-xs-12
                     h1.m-n.font-thin.h3.text-black Elvanto
-                    small.text-muted Welcome
+                    small.text-muted= title
                   .col-sm-6.text-right.hidden-xs
               .wrapper-md
                 .panel.wrapper
