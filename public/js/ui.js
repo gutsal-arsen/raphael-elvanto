@@ -92,7 +92,7 @@ $.fn.dataTree = function (data) {
 
 	primaries = _.uniqBy(_.without(primaries, null), 'id');
 
-
+	$(it).html('');
 	_.each(primaries, (p) => {
 	    var o = _.find(data, _.matches({elvantoId: p.id}))
 	    , el = $(Mustache.render(tmpl, o?o:{}));
