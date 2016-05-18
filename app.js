@@ -14,6 +14,7 @@ var routes = require('./routes/index');
 var users = require('./routes/user');
 var crawl = require('./routes/crawl');
 var search = require('./routes/search');
+var analyze = require('./routes/analyze');
 var auth = require('./routes/auth');
 var api = require('./routes/api');
 
@@ -46,6 +47,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/crawl', crawl);
 app.use('/search', search);
+app.use('/analyze', analyze);
 app.use('/auth', auth);
 app.use('/api', api);
 
