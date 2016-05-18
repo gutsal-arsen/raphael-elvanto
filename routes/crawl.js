@@ -250,7 +250,7 @@ router.dbToContacts = (accessToken, tickCb) => {
       return new Promise((res, rej) => {
         var total = results.length;
 
-        async.forEachOfLimit(results, 5, (person, idx, cb) => {
+        async.forEachOfLimit(results, 1, (person, idx, cb) => {
 	        var xmlString = router.google.createContactEntry(person, 'XXX');
 
           if(person.googleId){
