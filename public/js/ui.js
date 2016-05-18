@@ -82,6 +82,10 @@ class ProgressWidget extends Widget{
 }
 
 $.fn.dataTree = function (data) {
+    if(typeof data === 'string'){
+	$.error('Error:' + data);
+	return;
+    }
     _.each(this, function (it) {
 	var tmpl = $('#profile').html();
 

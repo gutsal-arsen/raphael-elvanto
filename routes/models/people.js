@@ -140,20 +140,20 @@ module.exports = {
 
   findPeoplesByPostcode: function(postCode, callback) {
     var db = mongoose.connection;
-    db.collection('peoples').find({'home_postcode': postCode}, this.tableFields).
+    db.collection('peoples').find({home_city: {$regex:'^' + postcode + '$', $options: 'i'}}, this.tableFields).
       toArray(callback);
   },
 
   findPeoplesByCity: function(city, callback) {
     var db = mongoose.connection;
-    db.collection('peoples').find({'home_city': city}, this.tableFields).
+    db.collection('peoples').find({home_city: {$regex:'^' + city + '$', $options: 'i'}}, this.tableFields).
       toArray(callback);
   },
 
   findPeoplesByStreetAddress: function(streetAddress, callback) {
     var db = mongoose.connection;
     db.collection('peoples').find({
-      'home_address': {'$regex': '.*'+streetAddress+'.*'}
+      'home_address': {$regex: '.*'+streetAddress+'.*', $options:'i'}
     }, this.tableFields).
       toArray(callback);
   },
