@@ -77,13 +77,13 @@ app.ws('/', (ws, req) => {
         });
     };break;
     case 'db_to_google': {
-      ws.send(JSON.stringify({fn: msg.fn, action: 'started' }))
+      //ws.send(JSON.stringify({fn: msg.fn, action: 'started' }))
       crawl
         .dbToContacts(msg.accessToken, (opts) => {
-          ws.send(JSON.stringify(_.extend(opts, {fn: msg.fn, action: 'progress'})));
+          //ws.send(JSON.stringify(_.extend(opts, {fn: msg.fn, action: 'progress'})));
         })
         .then((success) => {
-          ws.send(JSON.stringify({fn: msg.fn, action: 'finished'}))
+          //ws.send(JSON.stringify({fn: msg.fn, action: 'finished'}))
         })
         .catch((err) => {
           res.status(500).send(err);

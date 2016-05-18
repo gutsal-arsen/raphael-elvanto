@@ -265,7 +265,7 @@ router.dbToContacts = (accessToken, tickCb) => {
             router.google.createContact(xmlString, accessToken, (err, contact) => {
               console.log('Created: ' + num++);
               if(err){
-	              console.log(err);
+	              console.log('Error:', err);
               } else {
                 xml2js.parseString(contact, (err, obj) => {
                   var googleId = obj['entry']?obj['entry']['id'][0]:'';
@@ -274,10 +274,10 @@ router.dbToContacts = (accessToken, tickCb) => {
 		              People
 		                .findOneAndUpdate({_id:person._id.toString()}, {googleId: googleId}, {upsert:false})
 		                .then((p) => {
-			                cb();
                       tickCb({ progress: num, total: total});
+			                cb();
 		                })
-                    .catch((err) => console.log('oh no:' + err));
+                    .catch((err) => console.log('Error on storing:' + err));
                 });
               }
 	          })
