@@ -77,7 +77,12 @@ var handlers = {
     if ( e.which == 13 ) {
       $("button[data-click=search]").click();
     }
+  },
+
+  search_on_tab_change: function(e) {
+    $("button[data-click=search]").click();
   }
+
 };
 
 document.onreadystatechange = function (e) {

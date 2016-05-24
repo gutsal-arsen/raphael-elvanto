@@ -84,7 +84,7 @@ router.post('/', function (req, res) {
     case 'zip':
       Peoples.findPeoplesByPostcode(search_term, function (err, peoples) {
         //respondWithSearchResults(res, err, peoples, null);
-        res.json(peoples);
+          res.json(peoples);
       });
       break;
     case 'city':

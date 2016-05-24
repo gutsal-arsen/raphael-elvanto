@@ -5,7 +5,7 @@ block content
   script(src='https://maps.google.com/maps/api/js?key=#{serverApiKey}'  async defer)
 
   section
-  .col-lg-6.m-b-md
+  .col-lg-12.m-b-md
     .panel.panel-default
         .panel-heading
             .clearfix
@@ -22,19 +22,21 @@ block content
                 input.form-control#search_term(name="search_term", data-onkeypress="search_on_enter")
               button.btn.btn-sm.btn-primary(data-click="search").
                 search
+
   .tabs-container
     ul.nav.nav-tabs
       li.active
-        a(data-toggle='tab' href='#tab-1') Sort by Address
+        a(data-toggle='tab' href='#tab-1' data-click="search_on_tab_change") Sort by Address
       li
-        a(data-toggle='tab' href='#tab-2') Sort by City
+        a(data-toggle='tab' href='#tab-2' data-click="search_on_tab_change") Sort by City
       li
-        a(data-toggle='tab' href='#tab-3') Sort by ZIP
+        a(data-toggle='tab' href='#tab-3' data-click="search_on_tab_change") Sort by ZIP
 
   .tab-content
    #tab-1.tab-pane.active
     section.search_result
         .b-t.b-b(type='dataTree')
+
 
 
    #tab-2.tab-pane
