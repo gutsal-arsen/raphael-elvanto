@@ -58,11 +58,12 @@ var handlers = {
         search_term: $('*[name="search_term"]', $(e.target).parent()).val()
       },
       success: function (response, status) {
-        //$('.search_result').html(response);
+        var peoples = response;
         $('.search_result *[type="dataTree"]').dataTree(response);
         // FIX: google map isn't displayed correctly if has been constructed upon hidden state
         //$('.search_result').hide();
         console.log(status, response);
+        prepareMap(peoples);
       }
     });
   },
@@ -73,29 +74,6 @@ var handlers = {
     }
   },
 
-};
-
-document.onreadystatechange = function (e) {
-  if (e.target.readyState == 'complete') {
-    $('*[data-click]').each(function (idx, b) {
-      b.onclick = handlers[b.dataset['click']]; // assigning onclick handler
-    });
-    $('*[data-onkeypress]').each(function (idx, b) {
-      b.onkeypress = handlers[b.dataset['onkeypress']]; // assigning onkeypress handler
-    });
-
-    $("#search_type").change(function (e) {
-      if (e.currentTarget.selectedIndex === 3) { // last item selected
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(showPosition);
-        }
-
-        function showPosition(position) {
-          $("#search_term").val(position.coords.longitude + "," + position.coords.latitude + ",10");
-        }
-      }
-    });
-  }
 };
 
 function getMarkerBubbleContent(bubble_data) {
@@ -110,7 +88,7 @@ function addMarkerBubble(map, gMapMarker, personMarker) {
     phone: personMarker.phone,
     families: personMarker.families
   };
-  gMapMarker['bubble'] = new google.maps.InfoWindow({
+  infoWindow = gMapMarker['bubble'] = new google.maps.InfoWindow({
     content: getMarkerBubbleContent(bubbleData)
   });
 
@@ -121,11 +99,66 @@ function addMarkerBubble(map, gMapMarker, personMarker) {
   });
 }
 
+var calculateGMapPosition = function(peoples) {
+  // google map center position - first matched user from array, if any :
+  if (peoples.length > 0) {
+    var centerLng = _.reduce(peoples, function(sum, person) {
+      if(person.loc && person.loc.length){
+        return (sum + person.loc[0]);
+      } else {
+        return sum;
+      }
+    }, 0)/peoples.length;
+
+    var centerLat = _.reduce(peoples, function(sum, person) {
+      if(person.loc && person.loc.length){
+        return (sum + person.loc[1]);
+      } else {
+        return sum;
+      }
+    }, 0)/peoples.length;
+    return [centerLng, centerLat];
+  }
+  return [0,0]
+};
+
+
+var getPeoplesMarkers = function(peoples) {
+  var markers = _.map(peoples, function(person) {
+    if(person.loc && person.loc.length){
+      var marker = {
+        markerTitle: (person.lastname + ', ' + person.firstname + ' at ' + person.home_address),
+        lng: person.loc?person.loc[0]:0,
+        lat: person.loc?person.loc[1]:0,
+        address: person.home_address,
+        phone: person.phone?person.phone:person.mobile,
+        fullName: person.lastname + ',' + person.firstname,
+        families: _.map(person.family.family_member, function (person) {
+          return person.lastname + ', ' + person.firstname;
+        })
+      };
+      return marker;
+    } else {
+      return null;
+    }
+  });
+  return _.without(markers, null);
+};
+
+/* Render with the given peoples data
+   gMapPosition - optional map position, object with {lng:, lat:} properties. If it eq null, map will be auto-centered.
+*/
+var prepareMap = function(peoples, gMapPosition) {
+  var markers = getPeoplesMarkers(peoples);
+  var lngLat = calculateGMapPosition(peoples);
+  initMap(lngLat[0], lngLat[1], markers);
+}
+
 function initMap(lng, lat, peopleMarkers) {
   var mapDiv = document.getElementById('map');
   var map = new google.maps.Map(mapDiv, {
     center: {lat: parseFloat(lat), lng: parseFloat(lng)},
-    zoom: 8
+    zoom: 12
   });
   var googleMarkers = [];
   var peopleMarkersLength = peopleMarkers.length;
@@ -159,3 +192,26 @@ function initMap(lng, lat, peopleMarkers) {
     //map.setZoom(map.getZoom()-1);
   }
 }
+
+document.onreadystatechange = function (e) {
+  if (e.target.readyState == 'complete') {
+    $('*[data-click]').each(function (idx, b) {
+      b.onclick = handlers[b.dataset['click']]; // assigning onclick handler
+    });
+    $('*[data-onkeypress]').each(function (idx, b) {
+      b.onkeypress = handlers[b.dataset['onkeypress']]; // assigning onkeypress handler
+    });
+
+    $("#search_type").change(function (e) {
+      if (e.currentTarget.selectedIndex === 3) { // last item selected
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        }
+
+        function showPosition(position) {
+          $("#search_term").val(position.coords.longitude + "," + position.coords.latitude + ",10");
+        }
+      }
+    });
+  }
+};

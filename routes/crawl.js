@@ -207,14 +207,16 @@ router.transformObjects = (arr) => {
 		      if (data && data.length) {
 			      it.loc = [data[0].longitude, data[0].latitude];
 			      cache.set(szAddrObj, it.loc);
+            console.log('Location received:' + it.loc.toString());
 		      } else {
 			      console.log("Empty data returned:" + szAddrObj, ',value:' + value + ',data:' + data);
 		      }
 		      cb();
 		    });
 	    }
-	  });
-	  res(arr);
+	  }, () => {
+	    res(arr);
+    });
   });
 };
 

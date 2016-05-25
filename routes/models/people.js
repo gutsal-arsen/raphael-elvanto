@@ -89,39 +89,6 @@ module.exports = {
     return person.home_address;
   },
 
-  // get all phone numbers
-  getPhoneNumbers: function (person) {
-    return [person.mobile, person.phone];
-  },
-
-  // get any phone number
-  getPhoneNumber: function (person) {
-    return this.getPhoneNumbers(person)[0];
-  },
-
-  getPhoneStr: function (person) {
-    return  "# ".concat(this.getPhoneNumber(person));
-  },
-
-  getFamilyMemberStr: function(familyMember) {
-    var familyMemberStr = this.getFullNameStr(familyMember);
-    return familyMemberStr;
-  },
-
-  getFamilyMembersStrArray: function (families) {
-    var that = this;
-    return families.map(function(family_member) {
-      return that.getFamilyMemberStr(family_member)
-    });
-  },
-
-  getLng: function (person) {
-    return person.loc?person.loc[0]:0;
-  },
-
-  getLat: function (person) {
-    return person.loc?person.loc[1]:0;
-  },
 
   /*
   * Database-Specific Methods
