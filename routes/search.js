@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var async = require('async');
+var _ = require('lodash');
 
 var Peoples = require('./models/people');
 var mongoose = require('mongoose');
@@ -14,13 +15,13 @@ router.get('/', function (req, res) {
 
 router.get('/getCities', function (req, res) {
     Peoples.allCities(function (err, cities) {
-        res.json(cities);
+        res.json(_.without(cities, ''));
     });
 });
 
 router.get('/getZIPs', function (req, res) {
     Peoples.allZIPs(function (err, zips) {
-        res.json(zips);
+        res.json(_.without(zips, ''));
     });
 });
 
