@@ -105,16 +105,15 @@ module.exports = {
     }).toArray(callback);
   },
 
-  findPeoplesByPostcode: function(postcode, callback) {
+  findPeoplesByPostcode: function(postcodes, callback) {
     var db = mongoose.connection;
-    console.log('Postcode:' + postcode);
-    db.collection('peoples').find({home_postcode: {$regex:'^' + postcode + '$', $options: 'i'}}, this.tableFields).
+    db.collection('peoples').find({home_postcode: {$in: postcodes}}, this.tableFields).
       toArray(callback);
   },
 
-  findPeoplesByCity: function(city, callback) {
+  findPeoplesByCity: function(cities, callback) {
     var db = mongoose.connection;
-    db.collection('peoples').find({home_city: {$regex:'^' + city + '$', $options: 'i'}}, this.tableFields).
+    db.collection('peoples').find({home_city: {$in: cities}}, this.tableFields).
       toArray(callback);
   },
 
