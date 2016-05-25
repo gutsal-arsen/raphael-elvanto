@@ -26,18 +26,12 @@ block content
               .panel.panel-default
                   .panel-heading
                       .clearfix
-                        //.form-group
-                          // label Search type
-                          //- select.form-control#search_type(name='search_type')
-                          //-   option(disabled='disabled' selected="selected") Choose search method
-                          //-   option(value='city' title='example: Upland, Perris, Corona') City
-                          //-   option(value='street' title='example: 385') Street
-                          //-   option(value='loc' title='example: -117,33,40') Geolocation [lng,lat,rad]
-                          //-   option(value='zip' title='example: 92879') ZIP code
-                        .form-group
                           input(type='hidden' name='search_type' value='street')
+                        .form-group
                           label Search term
                           input.form-control(name="search_term", data-onkeypress="search_on_enter")
+                          &nbsp;
+                          button.btn.btn-sm.btn-primary.glyphicon.glyphicon-text-height.sort-alphabetical(data-toggle="button" data-click="search")
                         .form-group
                           button.btn.btn-sm.btn-primary(data-click="search")
                             | search
@@ -46,19 +40,18 @@ block content
                 .panel-heading
                   .b-t.b-b(type='dataTree')
 
-
-
-
        #tab-2.tab-pane
         section.search_result
           section
               .panel.panel-default
                   .panel-heading
                       .clearfix
-                        .form-group
                           input(type='hidden' name='search_type' value='city')
-                          label Select city
+                        .form-group
+                          label Select city:
                           select.form-control#search_city(name='search_term' multiple='multiple')
+                          &nbsp;
+                          button.btn.btn-sm.btn-primary.glyphicon.glyphicon-text-height.sort-alphabetical(data-toggle="button" data-click="search")
                         .form-group
                           button.btn.btn-sm.btn-primary(data-click="search")
                             | search
@@ -67,24 +60,25 @@ block content
                   .panel-heading
                     .b-t.b-b(type='dataTree')
 
-
        #tab-3.tab-pane
         section.search_result
-            section
-                .panel.panel-default
-                    .panel-heading
-                        .clearfix
-                          .form-group
-                            input(type='hidden' name='search_type' value='zip')
-                            label Select ZIP
-                            select.form-control#search_zip(name='search_term' multiple='multiple')
-                          .form-group
-                            button.btn.btn-sm.btn-primary(data-click="search")
-                              | search
-            section
+          section
               .panel.panel-default
                   .panel-heading
-                    .b-t.b-b(type='dataTree')
+                      .clearfix
+                          input(type='hidden' name='search_type' value='zip')
+                        .form-group
+                          label Select ZIP:&nbsp;
+                          select.form-control#search_zip(name='search_term' multiple='multiple')
+                          &nbsp;
+                          button.btn.btn-sm.btn-primary.glyphicon.glyphicon-text-height.sort-alphabetical(data-toggle="button" data-click="search")
+                        .form-group
+                          button.btn.btn-sm.btn-primary(data-click="search")
+                            | search
+          section
+            .panel.panel-default
+                .panel-heading
+                  .b-t.b-b(type='dataTree')
 
     .col-sm-8.m-b-md
      #map

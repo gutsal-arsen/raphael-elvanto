@@ -91,6 +91,9 @@ $.fn.dataTree = function (data) {
 
     var sortOrder = ['home_address', 'home_city', 'home_postcode'][parseInt($('ul.nav.nav-tabs li.active a').attr('href').replace(/#tab-/, '')) - 1];
     data = _.sortBy(data, sortOrder);
+    if($('.sort-alphabetical').hasClass('active')){ // FIXME: optimize that reverse
+      data == data.reverse();
+    }
 
 	  var primaries = _.map(data, function(it) {
 	    var primary = _.filter(it.family.family_member, _.matches({relationship: 'Primary Contact'}));
