@@ -54,8 +54,8 @@ var handlers = {
       url: '/search',
       method: 'POST',
       data: {
-        search_type: $('input[name="search_type"]', $(e.target).parent()).val(),
-        search_term: $('*[name="search_term"]', $(e.target).parent()).val()
+        search_type: $('input[name="search_type"]', $(e.target).parent().parent()).val(),
+        search_term: $('*[name="search_term"]', $(e.target).parent().parent()).val()
       },
       success: function (response, status) {
         var peoples = response;
@@ -88,7 +88,7 @@ function addMarkerBubble(map, gMapMarker, personMarker) {
     phone: personMarker.phone,
     families: personMarker.families
   };
-  infoWindow = gMapMarker['bubble'] = new google.maps.InfoWindow({
+  gMapMarker['bubble'] = new google.maps.InfoWindow({
     content: getMarkerBubbleContent(bubbleData)
   });
 

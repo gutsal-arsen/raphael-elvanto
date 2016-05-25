@@ -36,6 +36,7 @@ block content
                           input(type='hidden' name='search_type' value='street')
                           label Search term
                           input.form-control(name="search_term", data-onkeypress="search_on_enter")
+                        .form-group
                           button.btn.btn-sm.btn-primary(data-click="search")
                             | search
           section
@@ -56,6 +57,7 @@ block content
                           input(type='hidden' name='search_type' value='city')
                           label Select city
                           select.form-control#search_city(name='search_term')
+                        .form-group
                           button.btn.btn-sm.btn-primary(data-click="search")
                             | search
             section
@@ -74,6 +76,7 @@ block content
                             input(type='hidden' name='search_type' value='zip')
                             label Select ZIP
                             select.form-control#search_zip(name='search_term')
+                          .form-group
                             button.btn.btn-sm.btn-primary(data-click="search")
                               | search
             section
