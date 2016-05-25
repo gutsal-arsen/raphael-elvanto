@@ -18,10 +18,8 @@ block content
           li
             a(data-toggle='tab' href='#tab-3') ZIP
 
-
       .tab-content
        #tab-1.tab-pane.active
-        section.search_result
           section
               .panel.panel-default
                   .panel-heading
@@ -30,16 +28,7 @@ block content
                         .form-group
                           label Search term
                           input.form-control(name="search_term", data-onkeypress="search_on_enter")
-                        .form-group
-                          button.btn.btn-sm.btn-primary(data-click="search")
-                            | search
-          section
-            .panel.panel-default
-                .panel-heading
-                  .b-t.b-b(type='dataTree')
-
        #tab-2.tab-pane
-        section.search_result
           section
               .panel.panel-default
                   .panel-heading
@@ -48,16 +37,8 @@ block content
                         .form-group
                           label Select city:
                           select.form-control#search_city(name='search_term' multiple='multiple')
-                        .form-group
-                          button.btn.btn-sm.btn-primary(data-click="search")
-                            | search
-            section
-              .panel.panel-default
-                  .panel-heading
-                    .b-t.b-b(type='dataTree')
 
        #tab-3.tab-pane
-        section.search_result
           section
               .panel.panel-default
                   .panel-heading
@@ -66,13 +47,20 @@ block content
                         .form-group
                           label Select ZIP:&nbsp;
                           select.form-control#search_zip(name='search_term' multiple='multiple')
-                        .form-group
-                          button.btn.btn-sm.btn-primary(data-click="search")
-                            | search
-          section
-            .panel.panel-default
-                .panel-heading
-                  .b-t.b-b(type='dataTree')
+
+       section
+          .panel.panel-default
+            .clear-fix
+               button.btn.btn-sm.btn-primary(data-click="search")
+                | search
+               &nbsp;
+               button.btn.btn-sm.btn-primary.glyphicon.glyphicon-text-height.sort-alphabetical(data-toggle="button" data-click="search")
+
+       section.search_result
+         section
+          .panel.panel-default
+              .panel-heading
+                .b-t.b-b(type='dataTree')
 
     .col-sm-8.m-b-md
      #map

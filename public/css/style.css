@@ -19,6 +19,10 @@ div#map {
   height: 700px;
   background-color: #CCC; }
 
+.search_result {
+  overflow-y: scroll;
+  height: 500px; }
+
 /*# sourceMappingURL=style.css.map */
 
 /*# sourceMappingURL=style.css.map */

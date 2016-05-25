@@ -54,15 +54,12 @@ var handlers = {
       url: '/search',
       method: 'POST',
       data: {
-        search_type: $('input[name="search_type"]', $(e.target).parent().parent()).val(),
-        search_term: $('*[name="search_term"]', $(e.target).parent().parent()).val()
+        search_type: $('.tab-pane.active input[name="search_type"]').val(),
+        search_term: $('.tab-pane.active *[name="search_term"]').val()
       },
       success: function (response, status) {
         var peoples = response;
-        $('.search_result *[type="dataTree"]').dataTree(response);
-        // FIX: google map isn't displayed correctly if has been constructed upon hidden state
-        //$('.search_result').hide();
-        console.log(status, response);
+        $('.search_result *[type="dataTree"]').dataTree(peoples);
         prepareMap(peoples);
       }
     });

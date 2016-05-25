@@ -127,7 +127,6 @@ $(document).ready(() => {
         return $('<option value="' + it + '">' + it + '</option>');
       });
       $("#search_city").html(html);
-      //$("#search_city").multiselect();
     }
   });
 
@@ -139,7 +138,6 @@ $(document).ready(() => {
         return $('<option value="' + it + '">' + it + '</option>');
       });
       $("#search_zip").html(html);
-      //$("#search_zip").multiselect();
     }
   });
 });
