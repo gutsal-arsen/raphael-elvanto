@@ -4,48 +4,85 @@ block content
   include templates/search-tree
   script(src='https://maps.google.com/maps/api/js?key=#{serverApiKey}'  async defer)
 
-  section
-  .col-lg-12.m-b-md
-    .panel.panel-default
-        .panel-heading
-            .clearfix
-              .form-group
-                label Search type
-                select.form-control#search_type(name='search_type')
-                  option(disabled='disabled' selected="selected") Choose search method
-                  option(value='city' title='example: Upland, Perris, Corona') City
-                  option(value='street' title='example: 385') Street
-                  option(value='loc' title='example: -117,33,40') Geolocation [lng,lat,rad]
-                  option(value='zip' title='example: 92879') ZIP code
-              .form-group
-                label Search term
-                input.form-control#search_term(name="search_term", data-onkeypress="search_on_enter")
-              button.btn.btn-sm.btn-primary(data-click="search").
-                search
-
   .tabs-container
     ul.nav.nav-tabs
       li.active
-        a(data-toggle='tab' href='#tab-1' data-click="search_on_tab_change") Sort by Address
+        a(data-toggle='tab' href='#tab-1') Sort by Address
       li
-        a(data-toggle='tab' href='#tab-2' data-click="search_on_tab_change") Sort by City
+        a(data-toggle='tab' href='#tab-2') Sort by City
       li
-        a(data-toggle='tab' href='#tab-3' data-click="search_on_tab_change") Sort by ZIP
+        a(data-toggle='tab' href='#tab-3') Sort by ZIP
 
   .tab-content
    #tab-1.tab-pane.active
     section.search_result
-        .b-t.b-b(type='dataTree')
+      section
+        .col-lg-12.m-b-md
+          .panel.panel-default
+              .panel-heading
+                  .clearfix
+                    //.form-group
+                      // label Search type
+                      //- select.form-control#search_type(name='search_type')
+                      //-   option(disabled='disabled' selected="selected") Choose search method
+                      //-   option(value='city' title='example: Upland, Perris, Corona') City
+                      //-   option(value='street' title='example: 385') Street
+                      //-   option(value='loc' title='example: -117,33,40') Geolocation [lng,lat,rad]
+                      //-   option(value='zip' title='example: 92879') ZIP code
+                    .form-group
+                      input(type='hidden' name='search_type' value='street')
+                      label Search term
+                      input.form-control(name="search_term", data-onkeypress="search_on_enter")
+                      button.btn.btn-sm.btn-primary(data-click="search")
+                        | search
+      section
+        .col-lg-12.m-b-md
+          .panel.panel-default
+              .panel-heading
+                .b-t.b-b(type='dataTree')
+
 
 
 
    #tab-2.tab-pane
     section.search_result
-        .b-t.b-b(type='dataTree')
+      section
+        .col-lg-12.m-b-md
+          .panel.panel-default
+              .panel-heading
+                  .clearfix
+                    .form-group
+                      input(type='hidden' name='search_type' value='city')
+                      label Select city
+                      select.form-control#search_city(name='search_term')
+                      button.btn.btn-sm.btn-primary(data-click="search")
+                        | search
+        section
+          .col-lg-12.m-b-md
+            .panel.panel-default
+                .panel-heading
+                  .b-t.b-b(type='dataTree')
+
 
    #tab-3.tab-pane
     section.search_result
-        .b-t.b-b(type='dataTree')
+        section
+          .col-lg-12.m-b-md
+            .panel.panel-default
+                .panel-heading
+                    .clearfix
+                      .form-group
+                        input(type='hidden' name='search_type' value='zip')
+                        label Select ZIP
+                        select.form-control#search_zip(name='search_term')
+                        button.btn.btn-sm.btn-primary(data-click="search")
+                          | search
+        section
+          .col-lg-12.m-b-md
+            .panel.panel-default
+                .panel-heading
+                  .b-t.b-b(type='dataTree')
+
 
   br
   br

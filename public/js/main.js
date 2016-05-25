@@ -54,14 +54,8 @@ var handlers = {
       url: '/search',
       method: 'POST',
       data: {
-        search_type: $('select#search_type').val(),
-        search_term: $('input#search_term').val()
-      },
-      beforeSend: function () {
-        //$('.search_result').fadeOut('slow');
-      },
-      complete: function (response) {
-        //$('.search_result').fadeIn('slow');
+        search_type: $('input[name="search_type"]', $(e.target).parent()).val(),
+        search_term: $('*[name="search_term"]', $(e.target).parent()).val()
       },
       success: function (response, status) {
         //$('.search_result').html(response);
@@ -78,10 +72,6 @@ var handlers = {
       $("button[data-click=search]").click();
     }
   },
-
-  search_on_tab_change: function(e) {
-    $("button[data-click=search]").click();
-  }
 
 };
 

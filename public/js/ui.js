@@ -115,4 +115,26 @@ $.fn.dataTree = function (data) {
 
 $(document).ready(() => {
   $('#side-menu').metisMenu();
+
+  $.ajax({
+    url: '/search/getCities',
+    method: 'GET',
+    success: function (response, status) {
+      var html = _.map(response, function (it) {
+        return $('<option value="' + it + '">' + it + '</option>');
+      });
+      $("#search_city").html(html);
+    }
+  });
+
+  $.ajax({
+    url: '/search/getZIPs',
+    method: 'GET',
+    success: function (response, status) {
+      var html = _.map(response, function (it) {
+        return $('<option value="' + it + '">' + it + '</option>');
+      });
+      $("#search_zip").html(html);
+    }
+  });
 });

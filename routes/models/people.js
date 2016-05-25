@@ -138,9 +138,10 @@ module.exports = {
     }).toArray(callback);
   },
 
-  findPeoplesByPostcode: function(postCode, callback) {
+  findPeoplesByPostcode: function(postcode, callback) {
     var db = mongoose.connection;
-    db.collection('peoples').find({home_city: {$regex:'^' + postcode + '$', $options: 'i'}}, this.tableFields).
+    console.log('Postcode:' + postcode);
+    db.collection('peoples').find({home_postcode: {$regex:'^' + postcode + '$', $options: 'i'}}, this.tableFields).
       toArray(callback);
   },
 
@@ -165,5 +166,14 @@ module.exports = {
       loc:{$geoWithin: { $centerSphere: [ [lng, lat] , radius_radians] } }
     }, this.tableFields).
       toArray(callback);
-  }
+  },
+
+  allCities: function(callback) {
+    People.find().distinct('home_city', callback);
+  },
+
+  allZIPs: function(callback) {
+    People.find().distinct('home_postcode', callback);
+  },
+
 }

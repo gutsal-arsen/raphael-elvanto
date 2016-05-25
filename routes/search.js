@@ -72,18 +72,30 @@ var respondWithSearchResults = function(res, err, peoples, gMapPosition) {
   });
 }
 
+router.get('/getCities', function (req, res) {
+    Peoples.allCities(function (err, cities) {
+        res.json(cities);
+    });
+});
+
+router.get('/getZIPs', function (req, res) {
+    Peoples.allZIPs(function (err, zips) {
+        res.json(zips);
+    });
+});
+
 router.post('/', function (req, res) {
   var attrHash = req.body;
   var search_type = attrHash['search_type'],
       search_term = attrHash['search_term'];
   if (!search_type.length || !search_term.length) {
-    res.send("Search parameters can't be blank");
-    return;
+      res.status(500).send("Search parameters can't be blank");
+      return;
   }
   switch (search_type) {
-    case 'zip':
+  case 'zip':
       Peoples.findPeoplesByPostcode(search_term, function (err, peoples) {
-        //respondWithSearchResults(res, err, peoples, null);
+          //respondWithSearchResults(res, err, peoples, null);
           res.json(peoples);
       });
       break;
@@ -95,7 +107,8 @@ router.post('/', function (req, res) {
       break;
     case 'street':
       Peoples.findPeoplesByStreetAddress(search_term, function (err, peoples) {
-        respondWithSearchResults(res, err, peoples, null);
+          //respondWithSearchResults(res, err, peoples, null);
+	  res.json(peoples);
       });
       break;
     case 'loc':
@@ -112,7 +125,7 @@ router.post('/', function (req, res) {
       });
       break;
     default:
-      res.send("Undefined search type");
+      res.status(500).send("Undefined search type");
   }
 });
 
