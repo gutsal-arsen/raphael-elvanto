@@ -76,7 +76,8 @@
     "videogular-ima-ads": "~0.7.0",
     "videogular-overlay-play": "~0.7.0",
     "videogular-poster": "~0.7.0",
-    "waves": "~0.7.2"
+    "waves": "~0.7.2",
+    "bootstrap-multiselect": "^0.9.13"
   },
   "resolutions": {
     "angular-touch": "1.4.7",
