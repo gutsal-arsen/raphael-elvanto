@@ -145,6 +145,7 @@ $(document).ready(() => {
         return $('<option value="' + it + '">' + it + '</option>');
       });
       $(".search_city,.filter_city").html(html);
+      $(".search_city,.filter_city").multiselect();
     }
   });
 
@@ -156,6 +157,10 @@ $(document).ready(() => {
         return $('<option value="' + it + '">' + it + '</option>');
       });
       $(".search_zip").html(html);
+      $(".search_zip").multiselect({
+        enableFiltering: true,
+        includeSelectAllOption: true
+      });
     }
   });
 });
