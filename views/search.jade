@@ -26,8 +26,11 @@ block content
                       .clearfix
                           input(type='hidden' name='search_type' value='street')
                         .form-group
-                          label Search term
+                          label Search address
                           input.form-control(name="search_term", data-onkeypress="search_on_enter")
+                        .form-group
+                          label Filter by city:
+                          select.form-control.filter_city(name='filter_term' multiple='multiple')
        #tab-2.tab-pane
           section
               .panel.panel-default
@@ -36,7 +39,10 @@ block content
                           input(type='hidden' name='search_type' value='city')
                         .form-group
                           label Select city:
-                          select.form-control#search_city(name='search_term' multiple='multiple')
+                          select.form-control.search_city(name='search_term' multiple='multiple')
+                        .form-group
+                          label Filter by address
+                          input.form-control.filter_address(name="filter_term", data-onkeypress="search_on_enter")
 
        #tab-3.tab-pane
           section
@@ -46,7 +52,7 @@ block content
                           input(type='hidden' name='search_type' value='zip')
                         .form-group
                           label Select ZIP:&nbsp;
-                          select.form-control#search_zip(name='search_term' multiple='multiple')
+                          select.form-control.search_zip(name='search_term' multiple='multiple')
 
        section
           .panel.panel-default

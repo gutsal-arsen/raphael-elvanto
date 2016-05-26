@@ -82,10 +82,13 @@ class ProgressWidget extends Widget{
 }
 
 $.fn.dataTree = function (data) {
-  if(typeof data === 'string'){
-	  $.error('Error:' + data);
-	  return;
+  $(this).data = data || $(this.data);
+  if(!data){
+    throw new Error('No data loaded'); // data is not loaded
+  } else if(typeof data === 'string'){
+    throw new Error(data);// data contains error message
   }
+
   _.each(this, function (it) {
 	  var tmpl = $('#profile').html();
 
@@ -95,17 +98,32 @@ $.fn.dataTree = function (data) {
       data == data.reverse();
     }
 
+    var tabIdx = parseInt($('ul.nav.nav-tabs li.active a').attr('href').replace(/#tab-/, '')) - 1;
+    data = _.filter(data, function (it) {
+      var matchSel = ['.filter_city', '.filter_address'][tabIdx],
+          prop = ['home_city', 'home_address'][tabIdx];
+
+
+      return _.isEmpty($(matchSel).val())
+        ||
+        it[prop].match(new RegExp(typeof $(matchSel).val() === 'string'?$(matchSel).val():$(matchSel).val().join('|'), 'i')) != null;
+    });
+
+
 	  var primaries = _.map(data, function(it) {
 	    var primary = _.filter(it.family.family_member, _.matches({relationship: 'Primary Contact'}));
 	    return _.isEmpty(primary)?null:{id: primary[0].id};
 	  });
 
 	  primaries = _.uniqBy(_.without(primaries, null), 'id');
+    primaries = _.map(primaries, function (p) {
+      return _.find(data, _.matches({elvantoId: p.id}))
+    })
 
-	  $(it).html('');
-	  _.each(primaries, (p) => {
-	    var o = _.find(data, _.matches({elvantoId: p.id}))
-	    , el = $(Mustache.render(tmpl, o?o:{}));
+    $(it).data('tree', primaries);
+	  $(it).html('<h4>' + primaries.length + ' items found</h4>');
+	  _.each(primaries, (o) => {
+	    var el = $(Mustache.render(tmpl, o?o:{}));
 
 	    $(el).on('click', function (e) {
 		    $('.list-group.no-radius', this).toggleClass('none');
@@ -126,7 +144,7 @@ $(document).ready(() => {
       var html = _.map(response, function (it) {
         return $('<option value="' + it + '">' + it + '</option>');
       });
-      $("#search_city").html(html);
+      $(".search_city,.filter_city").html(html);
     }
   });
 
@@ -137,7 +155,7 @@ $(document).ready(() => {
       var html = _.map(response, function (it) {
         return $('<option value="' + it + '">' + it + '</option>');
       });
-      $("#search_zip").html(html);
+      $(".search_zip").html(html);
     }
   });
 });

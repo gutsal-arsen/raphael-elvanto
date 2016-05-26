@@ -59,8 +59,12 @@ var handlers = {
       },
       success: function (response, status) {
         var peoples = response;
-        $('.search_result *[type="dataTree"]').dataTree(peoples);
-        prepareMap(peoples);
+        var el = $('.search_result *[type="dataTree"]');
+        $(el).dataTree(peoples);
+        prepareMap($(el).data('tree'));
+      },
+      error: function (err) {
+        alert(err.responseText);
       }
     });
   },
@@ -100,7 +104,7 @@ var calculateGMapPosition = function(peoples) {
   // google map center position - first matched user from array, if any :
   if (peoples.length > 0) {
     var centerLng = _.reduce(peoples, function(sum, person) {
-      if(person.loc && person.loc.length){
+      if(person && person.loc && person.loc.length){
         return (sum + person.loc[0]);
       } else {
         return sum;
@@ -108,7 +112,7 @@ var calculateGMapPosition = function(peoples) {
     }, 0)/peoples.length;
 
     var centerLat = _.reduce(peoples, function(sum, person) {
-      if(person.loc && person.loc.length){
+      if(person && person.loc && person.loc.length){
         return (sum + person.loc[1]);
       } else {
         return sum;
@@ -122,7 +126,7 @@ var calculateGMapPosition = function(peoples) {
 
 var getPeoplesMarkers = function(peoples) {
   var markers = _.map(peoples, function(person) {
-    if(person.loc && person.loc.length){
+    if(person && person.loc && person.loc.length){
       var marker = {
         markerTitle: (person.lastname + ', ' + person.firstname + ' at ' + person.home_address),
         lng: person.loc?person.loc[0]:0,
@@ -199,14 +203,14 @@ document.onreadystatechange = function (e) {
       b.onkeypress = handlers[b.dataset['onkeypress']]; // assigning onkeypress handler
     });
 
-    $("#search_type").change(function (e) {
+    $(".search_type").change(function (e) {
       if (e.currentTarget.selectedIndex === 3) { // last item selected
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(showPosition);
         }
 
         function showPosition(position) {
-          $("#search_term").val(position.coords.longitude + "," + position.coords.latitude + ",10");
+          $(".search_term").val(position.coords.longitude + "," + position.coords.latitude + ",10");
         }
       }
     });
