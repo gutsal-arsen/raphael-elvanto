@@ -3,7 +3,7 @@
 ## Cloning sources and installing modules
 
 ```
-git clone git@github.com:gutsal-arsen/raphael-elvanto.git
+git clone git@github.com:aahutsal/raphael-elvanto.git
 cd raphael-elvanto
 
 npm install && bower install
